@@ -1,8 +1,12 @@
 package hw2;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class AquaFrame extends JFrame {
+public class AquaFrame extends JFrame
+{
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Menu");
         frame.setVisible(true);
@@ -32,6 +36,14 @@ public class AquaFrame extends JFrame {
 
         JMenuItem helpItem = new JMenuItem("Help");
         help.add(helpItem);
-    }
 
+        helpItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                JOptionPane.showMessageDialog(null," Home Work 3 \n GUI @ Threads");
+            }
+        });
+
+    }
 }
