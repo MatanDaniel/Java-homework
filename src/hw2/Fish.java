@@ -211,7 +211,7 @@ public class Fish extends Swimmable {
 
     public void drawAnimal(Graphics g)
     {
-        g.setColor(col);
+//        g.setColor(col);
         if(x_dir==1) // fish swims to right side
         {
             // Body of fish
@@ -225,7 +225,7 @@ public class Fish extends Swimmable {
 
             // Eye of fish
             Graphics2D g2 = (Graphics2D) g;
-            g2.setColor(new Color(255-col.getRed(),255-col.getGreen(),255- col.getBlue()));
+//            g2.setColor(new Color(255-col.getRed(),255-col.getGreen(),255- col.getBlue()));
             g2.fillOval(x_front-size/5, y_front-size/10, size/10, size/10);
 
             // Mouth of fish
@@ -251,7 +251,7 @@ public class Fish extends Swimmable {
 
             // Eye of fish
             Graphics2D g2 = (Graphics2D) g;
-            g2.setColor(new Color(255-col.getRed(),255-col.getGreen(),255-col.getBlue()));
+//            g2.setColor(new Color(255-col.getRed(),255-col.getGreen(),255-col.getBlue()));
             g2.fillOval(x_front+size/10, y_front-size/10, size/10, size/10);
 
             // Mouth of fish

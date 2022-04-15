@@ -159,7 +159,7 @@ public class Jellyfish extends Swimmable {
         else
             numLegs = 12;
 
-        g.setColor(col);
+//        g.setColor(col);
         g.fillArc(x_front - size/2, y_front - size/4, size, size/2, 0, 180);
 
         for(int i=0; i<numLegs; i++)
