@@ -11,7 +11,7 @@ public class AquaFrame extends JFrame
     public static void main(String[] args) {
         JFrame frame = new JFrame("Menu");
         frame.setVisible(true);
-        frame.setSize(750, 350);
+        frame.setSize(750,750);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JMenuBar menu = new JMenuBar();
@@ -78,6 +78,33 @@ public class AquaFrame extends JFrame
                 frame.getContentPane().setBackground(Color.WHITE);
             }
         });
+
+        item1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                try
+                {
+                    ImageIcon image1 = new ImageIcon(AquaFrame.class.getResource("image.jpg"));
+                    JLabel displayField = new JLabel(image1);
+                    frame.getContentPane().add(displayField);
+                    displayField.setSize(750,750);
+
+                } catch(Exception a)
+                {
+                    System.out.println("Could not load image!");
+                }
+            }
+        });
+        try
+        {
+            if (AquaFrame.class.getResource(("image.jpg")) == null) return;
+            ImageIcon image1 = new ImageIcon(AquaFrame.class.getResource("image.jpg"));
+            JLabel displayField = new JLabel();
+        } catch(Exception e){
+            System.out.println("Could not load image!");
+        }
+
 
 
     }
