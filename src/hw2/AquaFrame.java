@@ -59,13 +59,26 @@ public class AquaFrame extends JFrame
 
             }
         });
-        JPanel backGroundPane = new JPanel();
-        //lolk matatn
+          //blue background
+        item2.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               frame.getContentPane().setBackground(Color.BLUE);
+            }
+        });
+
+        //Returning the background to white by pressing "None" item
+        item3.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                frame.getContentPane().setBackground(Color.WHITE);
+            }
+        });
 
 
-    //mamamaa
-        //asdasdkj
-        //alksjdlaskjd
-//alskdjlasd
     }
 }
