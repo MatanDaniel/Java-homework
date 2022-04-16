@@ -1,6 +1,7 @@
 package hw2;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -44,6 +45,10 @@ public class AquaFrame extends JFrame
                 JOptionPane.showMessageDialog(null," Home Work 3 \n GUI @ Threads");
             }
         });
-
+        BorderLayout border=new BorderLayout();
+        frame.setLayout(border);
+        JPanel bottomPanel=new AquaPanel();
+        frame.add(bottomPanel,BorderLayout.SOUTH);
+        frame.pack();
     }
 }
