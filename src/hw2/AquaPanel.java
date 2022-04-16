@@ -5,50 +5,28 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AquaFrame extends JFrame
-{
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Menu");
-        frame.setVisible(true);
-        frame.setSize(750, 350);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JMenuBar menu = new JMenuBar();
-        frame.setJMenuBar(menu);
-
-
-        JMenu file = new JMenu("File");
-        menu.add(file);
-        JMenuItem exit = new JMenuItem("Exit");
-        file.add(exit);
-
-        JMenuItem item1 = new JMenuItem("Image");
-        JMenuItem item2 = new JMenuItem("Blue");
-        JMenuItem item3 = new JMenuItem("None");
-        JMenu background = new JMenu("Background");
-        menu.add(background);
-        background.add(item1);
-        background.add(item2);
-        background.add(item3);
-
-        JMenu help = new JMenu("Help");
-        menu.add(help);
-
-        JMenuItem helpItem = new JMenuItem("Help");
-        help.add(helpItem);
-
-        helpItem.addActionListener(new ActionListener() {
+public class AquaPanel extends JPanel{
+    public AquaPanel(){
+        setLayout(new GridLayout());
+        JButton addAnimal= new JButton("Add Animal");
+        JButton sleep= new JButton("Sleep");
+        JButton wakeUp= new JButton("Wake Up");
+        JButton reset= new JButton("Reset");
+        JButton food= new JButton("Food");
+        JButton info= new JButton("Info");
+        JButton exit= new JButton("Exit");
+        add(addAnimal);
+        add(sleep);
+        add(wakeUp);
+        add(reset);
+        add(food);
+        add(info);
+        add(exit);
+        exit.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                JOptionPane.showMessageDialog(null," Home Work 3 \n GUI @ Threads");
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
-        BorderLayout border=new BorderLayout();
-        frame.setLayout(border);
-        JPanel bottomPanel=new AquaPanel();
-        frame.add(bottomPanel,BorderLayout.SOUTH);
-        frame.pack();
     }
 }
