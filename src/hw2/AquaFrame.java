@@ -7,8 +7,8 @@ import java.awt.event.ActionListener;
 
 public class AquaFrame extends JFrame
 {
-
     public static void main(String[] args) {
+
         JFrame frame = new JFrame("Menu");
         frame.setVisible(true);
         frame.setSize(750, 350);
@@ -50,5 +50,15 @@ public class AquaFrame extends JFrame
         JPanel bottomPanel=new AquaPanel();
         frame.add(bottomPanel,BorderLayout.SOUTH);
         frame.pack();
+        exit.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                System.exit(0);
+
+            }
+        });
+
     }
 }
