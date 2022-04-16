@@ -50,5 +50,15 @@ public class AquaFrame extends JFrame
         JPanel bottomPanel=new AquaPanel();
         frame.add(bottomPanel,BorderLayout.SOUTH);
         frame.pack();
+          exit.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                System.exit(0);
+
+            }
+        });
+
     }
 }
