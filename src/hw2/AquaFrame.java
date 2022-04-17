@@ -29,7 +29,7 @@ public class AquaFrame extends JFrame
         background.add(item1);
         background.add(item2);
         background.add(item3);
-
+ 
         JMenu help = new JMenu("Help");
         menu.add(help);
 
