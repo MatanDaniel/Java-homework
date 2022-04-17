@@ -10,14 +10,12 @@ public class AquaFrame extends JFrame
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Menu");
+        JLabel displayField=new JLabel();
         frame.setVisible(true);
         frame.setSize(750,750);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         JMenuBar menu = new JMenuBar();
         frame.setJMenuBar(menu);
-
-
         JMenu file = new JMenu("File");
         menu.add(file);
         JMenuItem exit = new JMenuItem("Exit");
@@ -50,7 +48,7 @@ public class AquaFrame extends JFrame
         JPanel bottomPanel=new AquaPanel();
         frame.add(bottomPanel,BorderLayout.SOUTH);
         frame.pack();
-          exit.addActionListener(new ActionListener()
+        exit.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -59,13 +57,16 @@ public class AquaFrame extends JFrame
 
             }
         });
-          //blue background
+        //blue background
         item2.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-               frame.getContentPane().setBackground(Color.BLUE);
+                frame.getContentPane().remove(displayField);
+                frame.getContentPane().setBackground(Color.BLUE);
+                frame.revalidate();
+                frame.repaint();
             }
         });
 
@@ -75,7 +76,10 @@ public class AquaFrame extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                frame.getContentPane().remove(displayField);
                 frame.getContentPane().setBackground(Color.WHITE);
+                frame.revalidate();
+                frame.repaint();
             }
         });
 
@@ -86,26 +90,14 @@ public class AquaFrame extends JFrame
                 try
                 {
                     ImageIcon image1 = new ImageIcon(AquaFrame.class.getResource("image.jpg"));
-                    JLabel displayField = new JLabel(image1);
+                    displayField.setIcon(image1);
                     frame.getContentPane().add(displayField);
                     displayField.setSize(750,750);
-
                 } catch(Exception a)
                 {
                     System.out.println("Could not load image!");
                 }
             }
         });
-        try
-        {
-            if (AquaFrame.class.getResource(("image.jpg")) == null) return;
-            ImageIcon image1 = new ImageIcon(AquaFrame.class.getResource("image.jpg"));
-            JLabel displayField = new JLabel();
-        } catch(Exception e){
-            System.out.println("Could not load image!");
-        }
-
-
-
     }
 }
