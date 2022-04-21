@@ -5,14 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AquaFrame extends JFrame
-{
+public class AquaFrame extends JFrame {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Menu");
-        JLabel displayField=new JLabel();
+        JLabel displayField = new JLabel();
         frame.setVisible(true);
-        frame.setSize(750,750);
+        frame.setSize(750, 750);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JMenuBar menu = new JMenuBar();
         frame.setJMenuBar(menu);
@@ -29,7 +28,7 @@ public class AquaFrame extends JFrame
         background.add(item1);
         background.add(item2);
         background.add(item3);
- 
+
         JMenu help = new JMenu("Help");
         menu.add(help);
 
@@ -38,31 +37,28 @@ public class AquaFrame extends JFrame
 
         helpItem.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                JOptionPane.showMessageDialog(null," Home Work 3 \n GUI @ Threads");
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, " Home Work 3 \n GUI @ Threads");
             }
         });
-        BorderLayout border=new BorderLayout();
+        BorderLayout border = new BorderLayout();
         frame.setLayout(border);
-        JPanel bottomPanel=new AquaPanel();
-        frame.add(bottomPanel,BorderLayout.SOUTH);
+
+        // Singleton Design pattern
+        JPanel bottomPanel = AquaPanel.getInstance();
+        frame.add(bottomPanel, BorderLayout.SOUTH);
         frame.pack();
-        exit.addActionListener(new ActionListener()
-        {
+        exit.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 System.exit(0);
 
             }
         });
-        //blue background
-        item2.addActionListener(new ActionListener()
-        {
+        // blue background
+        item2.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 frame.getContentPane().remove(displayField);
                 frame.getContentPane().setBackground(Color.BLUE);
                 frame.revalidate();
@@ -70,12 +66,10 @@ public class AquaFrame extends JFrame
             }
         });
 
-        //Returning the background to white by pressing "None" item
-        item3.addActionListener(new ActionListener()
-        {
+        // Returning the background to white by pressing "None" item
+        item3.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 frame.getContentPane().remove(displayField);
                 frame.getContentPane().setBackground(Color.WHITE);
                 frame.revalidate();
@@ -85,16 +79,13 @@ public class AquaFrame extends JFrame
 
         item1.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                try
-                {
+            public void actionPerformed(ActionEvent e) {
+                try {
                     ImageIcon image1 = new ImageIcon(AquaFrame.class.getResource("image.jpg"));
                     displayField.setIcon(image1);
                     frame.getContentPane().add(displayField);
-                    displayField.setSize(750,750);
-                } catch(Exception a)
-                {
+                    displayField.setSize(750, 750);
+                } catch (Exception a) {
                     System.out.println("Could not load image!");
                 }
             }
