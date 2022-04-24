@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Dimension;
 
 public class AquaFrame extends JFrame {
 
@@ -11,7 +12,8 @@ public class AquaFrame extends JFrame {
         JFrame frame = new JFrame("Menu");
         JLabel displayField = new JLabel();
         frame.setVisible(true);
-        frame.setSize(750, 750);
+
+        frame.setPreferredSize(new Dimension(750, 750));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JMenuBar menu = new JMenuBar();
         frame.setJMenuBar(menu);

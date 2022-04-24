@@ -3,6 +3,7 @@ package hw2;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
 import java.awt.GridLayout;
 
 public class AddAnimalDialog extends JDialog {
@@ -80,18 +81,28 @@ public class AddAnimalDialog extends JDialog {
 
       // TODO: color - string -> int
 
-      AquaPanel aquaPanel = AquaPanel.getInstance();
+      if (!(size < 20 || size > 320) && !(horSpeed < 1 || horSpeed > 10) && !(verSpeed < 1 || verSpeed > 10)) {
 
-      if (type == "Fish") {
-        Fish fish = new Fish(size, 0, 0, horSpeed, verSpeed, 5);
+        AquaPanel aquaPanel = AquaPanel.getInstance();
 
-        aquaPanel.swimmers.add(fish);
-      } else {
-        Jellyfish jellyFish = new Jellyfish(size, 0, 0, horSpeed, verSpeed, 5);
+        if (aquaPanel.swimmers.size() >= 5)
+          JOptionPane.showMessageDialog(null, "Error: Can't add more than 5 animals!");
 
-        aquaPanel.swimmers.add(jellyFish);
+        if (type == "Fish") {
+          Fish fish = new Fish(size, 100, 100, horSpeed, verSpeed, Color.RED);
 
+          aquaPanel.swimmers.add(fish);
+          fish.start();
+        } else {
+          Jellyfish jellyFish = new Jellyfish(size, 100, 100, horSpeed, verSpeed, Color.BLACK);
+
+          aquaPanel.swimmers.add(jellyFish);
+          jellyFish.start();
+        }
+
+        aquaPanel.repaint();
       }
+
     }
   }
 

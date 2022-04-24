@@ -9,7 +9,8 @@ import java.util.concurrent.CyclicBarrier;
 public class Jellyfish extends Swimmable {
     private static final int EAT_DISTANCE = 4;
     private int size;
-    private int col, eatCount, x_front, y_front;
+    private int eatCount, x_front, y_front;
+    private Color col;
     private int x_dir, y_dir;
 
     /**
@@ -22,7 +23,7 @@ public class Jellyfish extends Swimmable {
      * @param verSpeed vertical speed
      * @param col      color of jellyfish
      */
-    public Jellyfish(int size, int x_front, int y_front, int horSpeed, int verSpeed, int col) {
+    public Jellyfish(int size, int x_front, int y_front, int horSpeed, int verSpeed, Color col) {
         super(horSpeed, verSpeed);
         this.size = size;
         this.x_front = x_front;
@@ -44,24 +45,15 @@ public class Jellyfish extends Swimmable {
         return EAT_DISTANCE;
     }
 
+    // TODO: override the run method of thread
+
     @Override
     public int getSize() {
         return size;
     }
 
     public String getColor() {
-        return switch (col) {
-            case 1 -> "Black";
-            case 2 -> "Red";
-            case 3 -> "Blue";
-            case 4 -> "Green";
-            case 5 -> "Cyan";
-            case 6 -> "Orange";
-            case 7 -> "Yellow";
-            case 8 -> "Magenta";
-            case 9 -> "Pink";
-            default -> " ";
-        };
+        return null;
     }
 
     public void eatInc() {
@@ -120,8 +112,9 @@ public class Jellyfish extends Swimmable {
      * 
      * @param size base size of jellyfish
      */
-    public void setSize(int size) {
+    public boolean setSize(int size) {
         this.size = size;
+        return true;
     }
 
     /**
@@ -129,8 +122,9 @@ public class Jellyfish extends Swimmable {
      * 
      * @param col color of jellyfish
      */
-    public void setCol(int col) {
+    public boolean setCol(Color col) {
         this.col = col;
+        return true;
     }
 
     /**
@@ -147,8 +141,9 @@ public class Jellyfish extends Swimmable {
      * 
      * @param x_front
      */
-    public void setX_front(int x_front) {
+    public boolean setX_front(int x_front) {
         this.x_front = x_front;
+        return true;
     }
 
     /**
@@ -156,8 +151,9 @@ public class Jellyfish extends Swimmable {
      * 
      * @param y_front
      */
-    public void setY_front(int y_front) {
+    public boolean setY_front(int y_front) {
         this.y_front = y_front;
+        return true;
     }
 
     /**
@@ -165,8 +161,9 @@ public class Jellyfish extends Swimmable {
      * 
      * @param x_dir
      */
-    public void setX_dir(int x_dir) {
+    public boolean setX_dir(int x_dir) {
         this.x_dir = x_dir;
+        return true;
     }
 
     /**
@@ -174,8 +171,9 @@ public class Jellyfish extends Swimmable {
      * 
      * @param y_dir
      */
-    public void setY_dir(int y_dir) {
+    public boolean setY_dir(int y_dir) {
         this.y_dir = y_dir;
+        return true;
     }
 
     /**
@@ -197,23 +195,27 @@ public class Jellyfish extends Swimmable {
             numLegs = 9;
         else
             numLegs = 12;
-
-        // g.setColor(col);
+        g.setColor(col);
         g.fillArc(x_front - size / 2, y_front - size / 4, size, size / 2, 0, 180);
-
         for (int i = 0; i < numLegs; i++)
-            g.drawLine(x_front - size / 2 + size / numLegs + size * i / (numLegs + 1), y_front,
-                    x_front - size / 2 + size / numLegs + size * i / (numLegs + 1), y_front + size / 3);
+            g.drawLine(x_front - size / 2 + size / numLegs + size * i / (numLegs + 1),
+                    y_front, x_front - size / 2 + size / numLegs + size * i / (numLegs + 1),
+                    y_front + size / 3);
     }
 
-    @java.lang.Override
+    @Override
     public void setSuspend() {
-
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
-    @java.lang.Override
+    @Override
     public void setResume() {
-
+        notify();
     }
 
     @Override

@@ -1,14 +1,13 @@
 package hw2;
 
 import hw2.Swimmable;
-
 import java.awt.*;
 import java.util.concurrent.CyclicBarrier;
 
 public class Fish extends Swimmable {
     private static final int EAT_DISTANCE = 4;
     private int size;
-    private int col;
+    private Color col;
     private int eatCount;
     private int x_front, y_front, x_dir, y_dir;
 
@@ -29,7 +28,7 @@ public class Fish extends Swimmable {
      * @param verSpeed vertical speed
      * @param col      fish color
      */
-    public Fish(int size, int x_front, int y_front, int horSpeed, int verSpeed, int col) {
+    public Fish(int size, int x_front, int y_front, int horSpeed, int verSpeed, Color col) {
         super(horSpeed, verSpeed);
         this.size = size;
         this.x_front = x_front;
@@ -39,6 +38,33 @@ public class Fish extends Swimmable {
         this.y_dir = 1;
         this.x_dir = 1;
         this.eatCount = 0;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+
+            super.run();
+            if (getX_front() > 750)
+                x_dir = -1;
+            if (getX_front() < 0)
+                x_dir = 1;
+            if (getY_front() > 750)
+                y_dir = -1;
+            if (getY_front() < 0)
+                y_dir = 1;
+
+            setX_front(getX_front() + (getHorSpeed() * x_dir));
+            setY_front(getY_front() + (getVerSpeed() * y_dir));
+
+            AquaPanel.getInstance().repaint();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getAnimalName() {
@@ -51,21 +77,6 @@ public class Fish extends Swimmable {
 
     public int getSize() {
         return this.size;
-    }
-
-    public String getColor() {
-        return switch (col) {
-            case 1 -> "Black";
-            case 2 -> "Red";
-            case 3 -> "Blue";
-            case 4 -> "Green";
-            case 5 -> "Cyan";
-            case 6 -> "Orange";
-            case 7 -> "Yellow";
-            case 8 -> "Magenta";
-            case 9 -> "Pink";
-            default -> " ";
-        };
     }
 
     public void eatInc() {
@@ -90,8 +101,9 @@ public class Fish extends Swimmable {
      * 
      * @param size base size of fish
      */
-    public void setSize(int size) {
+    public boolean setSize(int size) {
         this.size = size;
+        return true;
     }
 
     /**
@@ -99,7 +111,7 @@ public class Fish extends Swimmable {
      * 
      * @return color of fish
      */
-    public int getCol() {
+    public Color getCol() {
         return col;
     }
 
@@ -109,7 +121,7 @@ public class Fish extends Swimmable {
      * @param col color of fish
      * @return true if successful, otherwise false
      */
-    public Boolean setCol(int col) {
+    public boolean setCol(Color col) {
         this.col = col;
         return true;
     }
@@ -120,9 +132,8 @@ public class Fish extends Swimmable {
      * @param eatCount how much a fish ate
      * @return true if successful, otherwise false
      */
-    public boolean setEatCount(int eatCount) {
+    public void setEatCount(int eatCount) {
         this.eatCount = eatCount;
-        return true;
     }
 
     /**
@@ -220,31 +231,29 @@ public class Fish extends Swimmable {
      * changes color of fish in a circular form(9-->1)
      */
     public void changeColor() {
-        if (col < 9)
-            setCol(col + 1);
-        else
-            setCol(1);
+        // if (col < 9)
+        // setCol(col + 1);
+        // else
+        // setCol(1);
+
     }
 
     public void drawAnimal(Graphics g) {
-        // g.setColor(col);
+        g.setColor(col);
         if (x_dir == 1) // fish swims to right side
         {
             // Body of fish
             g.fillOval(x_front - size, y_front - size / 4, size, size / 2);
-
             // Tail of fish
             int[] x_t = { x_front - size - size / 4, x_front - size - size / 4, x_front - size };
             int[] y_t = { y_front - size / 4, y_front + size / 4, y_front };
             Polygon t = new Polygon(x_t, y_t, 3);
             g.fillPolygon(t);
-
             // Eye of fish
             Graphics2D g2 = (Graphics2D) g;
-            // g2.setColor(new Color(255-col.getRed(),255-col.getGreen(),255-
-            // col.getBlue()));
+            g2.setColor(new Color(255 - col.getRed(), 255 - col.getGreen(), 255 -
+                    col.getBlue()));
             g2.fillOval(x_front - size / 5, y_front - size / 10, size / 10, size / 10);
-
             // Mouth of fish
             if (size > 70)
                 g2.setStroke(new BasicStroke(3));
@@ -252,25 +261,22 @@ public class Fish extends Swimmable {
                 g2.setStroke(new BasicStroke(2));
             else
                 g2.setStroke(new BasicStroke(1));
+
             g2.drawLine(x_front, y_front, x_front - size / 10, y_front + size / 10);
             g2.setStroke(new BasicStroke(1));
         } else // fish swims to left side
         {
             // Body of fish
             g.fillOval(x_front, y_front - size / 4, size, size / 2);
-
             // Tail of fish
             int[] x_t = { x_front + size + size / 4, x_front + size + size / 4, x_front + size };
             int[] y_t = { y_front - size / 4, y_front + size / 4, y_front };
             Polygon t = new Polygon(x_t, y_t, 3);
-            g.fillPolygon(t);
-
-            // Eye of fish
+            g.fillPolygon(t);// Eye of fish
             Graphics2D g2 = (Graphics2D) g;
-            // g2.setColor(new
-            // Color(255-col.getRed(),255-col.getGreen(),255-col.getBlue()));
+            g2.setColor(new Color(255 - col.getRed(), 255 - col.getGreen(), 255 -
+                    col.getBlue()));
             g2.fillOval(x_front + size / 10, y_front - size / 10, size / 10, size / 10);
-
             // Mouth of fish
             if (size > 70)
                 g2.setStroke(new BasicStroke(3));
@@ -278,6 +284,7 @@ public class Fish extends Swimmable {
                 g2.setStroke(new BasicStroke(2));
             else
                 g2.setStroke(new BasicStroke(1));
+
             g2.drawLine(x_front, y_front, x_front + size / 10, y_front + size / 10);
             g2.setStroke(new BasicStroke(1));
         }
@@ -285,17 +292,31 @@ public class Fish extends Swimmable {
 
     @Override
     public void setSuspend() {
-
+        try {
+            synchronized (this) {
+                this.wait();
+            }
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void setResume() {
-
+        synchronized (this) {
+            this.notify();
+        }
     }
 
     @Override
     public void setBarrier(CyclicBarrier b) {
 
+    }
+
+    @Override
+    public String getColor() {
+        return null;
     }
 
 }
