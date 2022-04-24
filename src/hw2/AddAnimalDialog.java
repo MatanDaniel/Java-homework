@@ -63,11 +63,20 @@ public class AddAnimalDialog extends JDialog {
               + "\nhorizontal velocity: " + horSpeedTextField.getText()
               + "\nvertical velocity: " + verSpeedTextField.getText() + "\ncolor: " + colorList.getSelectedItem());
 
+      // Transfering elements into variables to save code line:
       String type = animalList.getSelectedItem().toString();
       int size = Integer.parseInt(sizeTextField.getText());
       int horSpeed = Integer.parseInt(horSpeedTextField.getText());
       int verSpeed = Integer.parseInt(verSpeedTextField.getText());
       String color = colorList.getSelectedItem().toString();
+
+      // validations for each field:
+      if (size < 20 || size > 320)
+        JOptionPane.showMessageDialog(null, "Error: Animal's size must be between 320 to 20");
+      if (horSpeed < 1 || horSpeed > 10)
+        JOptionPane.showMessageDialog(null, "Error: Animal's horizontal velocity must be between 1-10!");
+      if (verSpeed < 1 || verSpeed > 10)
+        JOptionPane.showMessageDialog(null, "Error: Animal's vertical velocity must be between 1-10!");
 
       // TODO: color - string -> int
 
