@@ -12,8 +12,7 @@ public class AquaFrame extends JFrame {
         JFrame frame = new JFrame("Menu");
         JLabel displayField = new JLabel();
         frame.setVisible(true);
-
-        frame.setPreferredSize(new Dimension(750, 750));
+        frame.setPreferredSize(new Dimension(1200, 700));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JMenuBar menu = new JMenuBar();
         frame.setJMenuBar(menu);
@@ -86,7 +85,7 @@ public class AquaFrame extends JFrame {
                     ImageIcon image1 = new ImageIcon(AquaFrame.class.getResource("image.jpg"));
                     displayField.setIcon(image1);
                     frame.getContentPane().add(displayField);
-                    displayField.setSize(750, 750);
+                    displayField.setSize(1200, 700);
                 } catch (Exception a) {
                     System.out.println("Could not load image!");
                 }
