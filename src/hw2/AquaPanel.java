@@ -1,7 +1,6 @@
 package hw2;
 
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
 import javax.swing.JButton;
 
 import java.awt.*;
@@ -15,13 +14,13 @@ public class AquaPanel extends JPanel {
     private static AquaPanel single_instance = null;
 
     public HashSet<Swimmable> swimmers = new HashSet<Swimmable>();
-
+    public JPanel buttonPanel=new JPanel();
     private AquaPanel() {
-        // setLayout(new GridLayout());
+        buttonPanel.setLayout(new GridLayout());
 
-        setPreferredSize(new Dimension(700, 700));
+        setPreferredSize(new Dimension(1200, 700));
 
-        JToolBar toolBar = new JToolBar();
+        //JToolBar toolBar = new JToolBar();
 
         JButton addAnimal = new JButton("Add Animal");
         JButton sleep = new JButton("Sleep");
@@ -31,15 +30,18 @@ public class AquaPanel extends JPanel {
         JButton info = new JButton("Info");
         JButton exit = new JButton("Exit");
 
-        toolBar.add(addAnimal);
-        toolBar.add(sleep);
-        toolBar.add(wakeUp);
-        toolBar.add(reset);
-        toolBar.add(food);
-        toolBar.add(info);
-        toolBar.add(exit);
+        buttonPanel.add(addAnimal);
+        buttonPanel.add(sleep);
+        buttonPanel.add(wakeUp);
+        buttonPanel.add(reset);
+        buttonPanel.add(food);
+        buttonPanel.add(info);
+        buttonPanel.add(exit);
 
-        add(toolBar);
+        BorderLayout border=new BorderLayout();
+        this.setLayout(border);
+        this.add(buttonPanel,BorderLayout.SOUTH);
+        //add(toolBar);
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
