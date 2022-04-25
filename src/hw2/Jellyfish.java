@@ -15,7 +15,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * constructor given params
-     * 
+     *
      * @param size     base size of jellyfish
      * @param x_front  future use
      * @param y_front  future use
@@ -38,7 +38,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * getter
-     * 
+     *
      * @return amount of food a jellyfish can eat
      */
     public int getEAT_DISTANCE() {
@@ -52,7 +52,7 @@ public class Jellyfish extends Swimmable {
         return size;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return null;
     }
 
@@ -63,6 +63,34 @@ public class Jellyfish extends Swimmable {
             eatCount = 0;
         }
     }
+
+    @Override
+    public void run() {
+        while (true) {
+
+            super.run();
+            if (getX_front() > 1150)
+                x_dir = -1;
+            if (getX_front() <50)
+                x_dir = 1;
+            if (getY_front() > 660)
+                y_dir = -1;
+            if (getY_front() < 90)
+                y_dir = 1;
+
+            setX_front(getX_front() + (getHorSpeed() * x_dir));
+            setY_front(getY_front() + (getVerSpeed() * y_dir));
+
+            AquaPanel.getInstance().repaint();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     @Override
     public String getAnimalName() {
@@ -109,7 +137,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * setter
-     * 
+     *
      * @param size base size of jellyfish
      */
     public boolean setSize(int size) {
@@ -119,7 +147,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * setter
-     * 
+     *
      * @param col color of jellyfish
      */
     public boolean setCol(Color col) {
@@ -129,7 +157,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * setter
-     * 
+     *
      * @param eatCount how much a jellyfish can eat
      */
     public void setEatCount(int eatCount) {
@@ -138,7 +166,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * setter future use
-     * 
+     *
      * @param x_front
      */
     public boolean setX_front(int x_front) {
@@ -148,7 +176,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * setter future use
-     * 
+     *
      * @param y_front
      */
     public boolean setY_front(int y_front) {
@@ -158,7 +186,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * setter future use
-     * 
+     *
      * @param x_dir
      */
     public boolean setX_dir(int x_dir) {
@@ -168,7 +196,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * setter future use
-     * 
+     *
      * @param y_dir
      */
     public boolean setY_dir(int y_dir) {
@@ -178,7 +206,7 @@ public class Jellyfish extends Swimmable {
 
     /**
      * change size of jellyfish
-     * 
+     *
      * @return new size
      */
     public int changeJellyFish() {
