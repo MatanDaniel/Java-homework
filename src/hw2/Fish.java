@@ -20,7 +20,7 @@ public class Fish extends Swimmable {
 
     /**
      * constructor given parameters
-     * 
+     *
      * @param size     base size of fish
      * @param x_front  for future use
      * @param y_front  for future use
@@ -45,13 +45,13 @@ public class Fish extends Swimmable {
         while (true) {
 
             super.run();
-            if (getX_front() > 750)
+            if (getX_front() > 1150)
                 x_dir = -1;
-            if (getX_front() < 0)
+            if (getX_front() <50)
                 x_dir = 1;
-            if (getY_front() > 750)
+            if (getY_front() > 660)
                 y_dir = -1;
-            if (getY_front() < 0)
+            if (getY_front() < 90)
                 y_dir = 1;
 
             setX_front(getX_front() + (getHorSpeed() * x_dir));
@@ -89,7 +89,7 @@ public class Fish extends Swimmable {
 
     /**
      * getter of how much a fish can eat
-     * 
+     *
      * @return how much a fish can eat
      */
     public int getEAT_DISTANCE() {
@@ -98,7 +98,7 @@ public class Fish extends Swimmable {
 
     /**
      * setter of base size of fish
-     * 
+     *
      * @param size base size of fish
      */
     public boolean setSize(int size) {
@@ -108,7 +108,7 @@ public class Fish extends Swimmable {
 
     /**
      * getter
-     * 
+     *
      * @return color of fish
      */
     public Color getCol() {
@@ -117,7 +117,7 @@ public class Fish extends Swimmable {
 
     /**
      * setter
-     * 
+     *
      * @param col color of fish
      * @return true if successful, otherwise false
      */
@@ -128,7 +128,7 @@ public class Fish extends Swimmable {
 
     /**
      * setter
-     * 
+     *
      * @param eatCount how much a fish ate
      * @return true if successful, otherwise false
      */
@@ -138,7 +138,7 @@ public class Fish extends Swimmable {
 
     /**
      * getter (future use)
-     * 
+     *
      * @return future use
      */
     public int getX_front() {
@@ -147,7 +147,7 @@ public class Fish extends Swimmable {
 
     /**
      * future use
-     * 
+     *
      * @param x_front
      * @return future use
      */
@@ -158,7 +158,7 @@ public class Fish extends Swimmable {
 
     /**
      * getter (future use)
-     * 
+     *
      * @return future use
      */
     public int getY_front() {
@@ -167,7 +167,7 @@ public class Fish extends Swimmable {
 
     /**
      * setter (future use)
-     * 
+     *
      * @param y_front
      * @return future use
      */
@@ -178,7 +178,7 @@ public class Fish extends Swimmable {
 
     /**
      * getter (future use)
-     * 
+     *
      * @return future use
      */
     public int getX_dir() {
@@ -187,7 +187,7 @@ public class Fish extends Swimmable {
 
     /**
      * setter (future use)
-     * 
+     *
      * @param x_dir
      * @return future use
      */
@@ -198,7 +198,7 @@ public class Fish extends Swimmable {
 
     /**
      * getter future use
-     * 
+     *
      * @return future use
      */
     public int getY_dir() {
@@ -207,7 +207,7 @@ public class Fish extends Swimmable {
 
     /**
      * setter (future use)
-     * 
+     *
      * @param y_dir
      * @return future use
      */
@@ -218,7 +218,7 @@ public class Fish extends Swimmable {
 
     /**
      * change size of fish
-     * 
+     *
      * @return new size of fish
      */
     public int changeFish() {
@@ -291,22 +291,19 @@ public class Fish extends Swimmable {
     }
 
     @Override
-    public void setSuspend() {
-        try {
-            synchronized (this) {
-                this.wait();
+    public synchronized void setSuspend() {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            //notify();
         }
-    }
 
     @Override
-    public void setResume() {
-        synchronized (this) {
-            this.notify();
-        }
+    public synchronized void setResume() {
+        this.notifyAll();
     }
 
     @Override
@@ -315,7 +312,7 @@ public class Fish extends Swimmable {
     }
 
     @Override
-    public String getColor() {
+    public Color getColor() {
         return null;
     }
 
