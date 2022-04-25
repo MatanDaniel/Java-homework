@@ -27,7 +27,7 @@ public abstract class Swimmable extends Thread {
 
     /**
      * converts animal properties in string format
-     * 
+     *
      * @return animal properties in string format
      */
     public String toString() {
@@ -37,7 +37,7 @@ public abstract class Swimmable extends Thread {
 
     /**
      * constructor given parameters
-     * 
+     *
      * @param horSpeed
      * @param verSpeed
      */
@@ -48,7 +48,7 @@ public abstract class Swimmable extends Thread {
 
     /**
      * get horizontal speed
-     * 
+     *
      * @return horizontal speed
      */
     public int getHorSpeed() {
@@ -57,7 +57,7 @@ public abstract class Swimmable extends Thread {
 
     /**
      * set Horizontal speed
-     * 
+     *
      * @param horSpeed Horizontal speed
      */
     public void setHorSpeed(int horSpeed) {
@@ -66,7 +66,7 @@ public abstract class Swimmable extends Thread {
 
     /**
      * get vertical speed
-     * 
+     *
      * @return vertical speed
      */
     public int getVerSpeed() {
@@ -75,7 +75,7 @@ public abstract class Swimmable extends Thread {
 
     /**
      * set vertical speed
-     * 
+     *
      * @param verSpeed Vertical speed
      */
     public void setVerSpeed(int verSpeed) {
@@ -84,31 +84,31 @@ public abstract class Swimmable extends Thread {
 
     /**
      * gets animal name
-     * 
+     *
      * @return animal name
      */
     public abstract String getAnimalName();
 
     /**
      * gets value of how much an animal has ate
-     * 
+     *
      * @return how much an animal has ate
      */
     public abstract int getEatCount();
 
     /**
      * getter of animal size
-     * 
+     *
      * @return animal size
      */
     public abstract int getSize();
 
     /**
      * getter of animal color
-     * 
+     *
      * @return animal color
      */
-    public abstract String getColor();
+    public abstract Color getColor();
 
     /**
      * increases amount that an animal has ate by 1
@@ -117,7 +117,7 @@ public abstract class Swimmable extends Thread {
 
     /**
      * compares size between current animal and received animal object
-     * 
+     *
      * @param other
      * @return size difference (current minus other)
      */
@@ -129,7 +129,7 @@ public abstract class Swimmable extends Thread {
      * Because of the onion principle if we make equals only in the base class, it
      * will be applied to all
      * derived classes.
-     * 
+     *
      * @param swimmable
      * @return returns whether horSpeed equals to received object's, as well as for
      *         verSpeed
