@@ -53,7 +53,7 @@ public class Jellyfish extends Swimmable {
     }
 
     public Color getColor() {
-        return null;
+        return col;
     }
 
     public void eatInc() {
@@ -94,7 +94,7 @@ public class Jellyfish extends Swimmable {
 
     @Override
     public String getAnimalName() {
-        return "q3.Jellyfish";
+        return "Jellyfish";
     }
 
     /**
