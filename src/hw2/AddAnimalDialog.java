@@ -52,6 +52,7 @@ public class AddAnimalDialog extends JDialog {
 
         dialog.add(panel);
         dialog.setVisible(true);
+        dialog.setLocationRelativeTo(null);
     }
 
     private class submitButtonActionListener implements ActionListener {
