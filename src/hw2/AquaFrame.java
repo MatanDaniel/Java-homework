@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Dimension;
+import hw2.AquaPanel;
 
 public class AquaFrame extends JFrame {
 
@@ -60,10 +61,7 @@ public class AquaFrame extends JFrame {
         item2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.getContentPane().remove(displayField);
-                frame.getContentPane().setBackground(Color.BLUE);
-                frame.revalidate();
-                frame.repaint();
+                AquaPanel.getInstance().changeBackground("blue");
             }
         });
 
@@ -71,24 +69,14 @@ public class AquaFrame extends JFrame {
         item3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.getContentPane().remove(displayField);
-                frame.getContentPane().setBackground(Color.WHITE);
-                frame.revalidate();
-                frame.repaint();
+                AquaPanel.getInstance().changeBackground("white");
             }
         });
 
         item1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    ImageIcon image1 = new ImageIcon(AquaFrame.class.getResource("image.jpg"));
-                    displayField.setIcon(image1);
-                    frame.getContentPane().add(displayField);
-                    displayField.setSize(1200, 700);
-                } catch (Exception a) {
-                    System.out.println("Could not load image!");
-                }
+                AquaPanel.getInstance().changeBackground("image");
             }
         });
     }
