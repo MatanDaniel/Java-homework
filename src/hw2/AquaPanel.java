@@ -116,15 +116,9 @@ public class AquaPanel extends JPanel {
 
     public void getInfo(){
         if(this.frame.isVisible()){
-            /*
-             * check if the frame is visible then close him
-             */
             this.frame.dispose();
         }
         else{
-            /*
-             * make new frame
-             */
             frame = new JFrame("Info");
             frame.setLayout(new BorderLayout());
             tbl_info = getAnimalList();
@@ -151,9 +145,6 @@ public class AquaPanel extends JPanel {
         tbl.addColumn("Hor.Speed");
         tbl.addColumn("Var.Speed");
         tbl.addColumn("Eat Count");
-        /*
-         * add titles to columns
-         */
         Object[] columns = {"Name", "Color", "Size", "Hor.Speed", "Var.Speed",
                 "Eat Counter"};
         tbl.addRow(columns);
