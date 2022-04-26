@@ -68,7 +68,7 @@ public class Fish extends Swimmable {
     }
 
     public String getAnimalName() {
-        return "q3.Fish";
+        return "Fish";
     }
 
     public int getEatCount() {
@@ -313,7 +313,7 @@ public class Fish extends Swimmable {
 
     @Override
     public Color getColor() {
-        return null;
+        return col;
     }
 
 }
