@@ -53,11 +53,23 @@ public class Fish extends Swimmable {
                 y_dir = -1;
             if (getY_front() < 90)
                 y_dir = 1;
-
-            setX_front(getX_front() + (getHorSpeed() * x_dir));
-            setY_front(getY_front() + (getVerSpeed() * y_dir));
-
-            AquaPanel.getInstance().repaint();
+            if(AquaPanel.getInstance().w.isOn){
+                if(x_dir==1) {
+                    while(getX_front()<=AquaPanel.getInstance().getWidth()/2) {
+                        setX_front(getX_front() + getHorSpeed() * x_dir);
+                    }
+                }
+                else{
+                    while(getX_front()>=AquaPanel.getInstance().getWidth()/2) {
+                        setX_front(getX_front() + getHorSpeed() * x_dir);
+                    }
+                }
+            }
+            else {
+                setX_front(getX_front() + (getHorSpeed() * x_dir));
+                setY_front(getY_front() + (getVerSpeed() * y_dir));
+            }
+                AquaPanel.getInstance().repaint();
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
