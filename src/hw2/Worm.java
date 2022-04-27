@@ -6,6 +6,11 @@ public class Worm{
     private int x_front, y_front, x_dir, y_dir;
     public boolean isOn=false;
     public Worm(){}
+
+    public void setOn(boolean on) {
+        isOn = on;
+    }
+
     public static void drawAnimal(Graphics g, AquaPanel panel){
         Graphics2D g2=(Graphics2D) g;
         g2.setStroke(new BasicStroke(3));
