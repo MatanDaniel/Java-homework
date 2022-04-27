@@ -1,68 +1,44 @@
 package hw2;
 
+import hw2.Swimmable;
 import java.awt.*;
 import java.util.concurrent.CyclicBarrier;
 
-/**
- * * @author Matan Daniel, 315783522 and Ron Bar-Zvi, 304969520
- */
-public class Jellyfish extends Swimmable {
+public class Fish extends Swimmable {
     private static final int EAT_DISTANCE = 4;
     private int size;
-    private int eatCount, x_front, y_front;
     private Color col;
-    private int x_dir, y_dir;
+    private int eatCount;
+    private int x_front, y_front, x_dir, y_dir;
     private int dirChange;
     /**
-     * constructor given params
+     * default constructor
+     */
+    public Fish() {
+        super();
+    }
+
+    /**
+     * constructor given parameters
      *
-     * @param size     base size of jellyfish
-     * @param x_front  future use
-     * @param y_front  future use
+     * @param size     base size of fish
+     * @param x_front  for future use
+     * @param y_front  for future use
      * @param horSpeed horizontal speed
      * @param verSpeed vertical speed
-     * @param col      color of jellyfish
+     * @param col      fish color
      */
-    public Jellyfish(int size, int x_front, int y_front, int horSpeed, int verSpeed, Color col) {
+    public Fish(int size, int x_front, int y_front, int horSpeed, int verSpeed, Color col) {
         super(horSpeed, verSpeed);
         this.size = size;
         this.x_front = x_front;
         this.y_front = y_front;
+        this.verSpeed = verSpeed;
         this.col = col;
-        eatCount = 0;
-        y_dir = 1;
-        x_dir = 1;
+        this.y_dir = 1;
+        this.x_dir = 1;
+        this.eatCount = 0;
         this.dirChange=-1;
-    }
-
-    // Getters for each field:
-
-    /**
-     * getter
-     *
-     * @return amount of food a jellyfish can eat
-     */
-    public int getEAT_DISTANCE() {
-        return EAT_DISTANCE;
-    }
-
-    // TODO: override the run method of thread
-
-    @Override
-    public int getSize() {
-        return size;
-    }
-
-    public Color getColor() {
-        return col;
-    }
-
-    public void eatInc() {
-        eatCount++;
-        if (eatCount > EAT_DISTANCE) {
-            size++;
-            eatCount = 0;
-        }
     }
 
     @Override
@@ -85,7 +61,7 @@ public class Jellyfish extends Swimmable {
                     eatInc();
                 }
                 if(x_dir==1 && (getX_front()<AquaPanel.getInstance().getWidth()/2)) {
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                        setX_front(getX_front() + getHorSpeed() * x_dir);
                 }
                 else if(x_dir==1&&getX_front()>AquaPanel.getInstance().getWidth()/2){
                     x_dir=-1;
@@ -106,7 +82,7 @@ public class Jellyfish extends Swimmable {
                 setX_front(getX_front() + (getHorSpeed() * x_dir));
                 setY_front(getY_front() + (getVerSpeed() * y_dir));
             }
-            AquaPanel.getInstance().repaint();
+                AquaPanel.getInstance().repaint();
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -116,53 +92,39 @@ public class Jellyfish extends Swimmable {
         }
     }
 
-    @Override
     public String getAnimalName() {
-        return "Jellyfish";
+        return "Fish";
     }
 
-    /**
-     * getter (future use)
-     */
-    @Override
     public int getEatCount() {
-        return eatCount;
+        return this.eatCount;
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
+    public void eatInc() {
+        eatCount++;
+        if (eatCount >= EAT_DISTANCE) {
+            size++;
+            eatCount = 0;
+        }
     }
 
     /**
-     * getter (future use)
-     */
-    public int getX_front() {
-        return x_front;
-    }
-
-    /**
-     * getter (future use)
-     */
-    public int getY_front() {
-        return y_front;
-    }
-
-    /**
-     * getter (future use)
-     */
-    public int getX_dir() {
-        return x_dir;
-    }
-
-    /**
-     * getter (future use)
-     */
-    public int getY_dir() {
-        return y_dir;
-    }
-
-    // Setters for each field
-
-    /**
-     * setter
+     * getter of how much a fish can eat
      *
-     * @param size base size of jellyfish
+     * @return how much a fish can eat
+     */
+    public int getEAT_DISTANCE() {
+        return EAT_DISTANCE;
+    }
+
+    /**
+     * setter of base size of fish
+     *
+     * @param size base size of fish
      */
     public boolean setSize(int size) {
         this.size = size;
@@ -170,9 +132,19 @@ public class Jellyfish extends Swimmable {
     }
 
     /**
+     * getter
+     *
+     * @return color of fish
+     */
+    public Color getCol() {
+        return col;
+    }
+
+    /**
      * setter
      *
-     * @param col color of jellyfish
+     * @param col color of fish
+     * @return true if successful, otherwise false
      */
     public boolean setCol(Color col) {
         this.col = col;
@@ -182,16 +154,27 @@ public class Jellyfish extends Swimmable {
     /**
      * setter
      *
-     * @param eatCount how much a jellyfish can eat
+     * @param eatCount how much a fish ate
+     * @return true if successful, otherwise false
      */
     public void setEatCount(int eatCount) {
         this.eatCount = eatCount;
     }
 
     /**
-     * setter future use
+     * getter (future use)
+     *
+     * @return future use
+     */
+    public int getX_front() {
+        return x_front;
+    }
+
+    /**
+     * future use
      *
      * @param x_front
+     * @return future use
      */
     public boolean setX_front(int x_front) {
         this.x_front = x_front;
@@ -199,9 +182,19 @@ public class Jellyfish extends Swimmable {
     }
 
     /**
-     * setter future use
+     * getter (future use)
+     *
+     * @return future use
+     */
+    public int getY_front() {
+        return y_front;
+    }
+
+    /**
+     * setter (future use)
      *
      * @param y_front
+     * @return future use
      */
     public boolean setY_front(int y_front) {
         this.y_front = y_front;
@@ -209,9 +202,19 @@ public class Jellyfish extends Swimmable {
     }
 
     /**
-     * setter future use
+     * getter (future use)
+     *
+     * @return future use
+     */
+    public int getX_dir() {
+        return x_dir;
+    }
+
+    /**
+     * setter (future use)
      *
      * @param x_dir
+     * @return future use
      */
     public boolean setX_dir(int x_dir) {
         this.x_dir = x_dir;
@@ -219,9 +222,19 @@ public class Jellyfish extends Swimmable {
     }
 
     /**
-     * setter future use
+     * getter future use
+     *
+     * @return future use
+     */
+    public int getY_dir() {
+        return y_dir;
+    }
+
+    /**
+     * setter (future use)
      *
      * @param y_dir
+     * @return future use
      */
     public boolean setY_dir(int y_dir) {
         this.y_dir = y_dir;
@@ -229,50 +242,103 @@ public class Jellyfish extends Swimmable {
     }
 
     /**
-     * change size of jellyfish
+     * change size of fish
      *
-     * @return new size
+     * @return new size of fish
      */
-    public int changeJellyFish() {
+    public int changeFish() {
         if (eatCount == EAT_DISTANCE)
             size++;
         return size;
     }
 
-    public void drawAnimal(Graphics g) {
-        int numLegs;
-        if (size < 40)
-            numLegs = 5;
-        else if (size < 80)
-            numLegs = 9;
-        else
-            numLegs = 12;
-        g.setColor(col);
-        g.fillArc(x_front - size / 2, y_front - size / 4, size, size / 2, 0, 180);
-        for (int i = 0; i < numLegs; i++)
-            g.drawLine(x_front - size / 2 + size / numLegs + size * i / (numLegs + 1),
-                    y_front, x_front - size / 2 + size / numLegs + size * i / (numLegs + 1),
-                    y_front + size / 3);
+    /**
+     * changes color of fish in a circular form(9-->1)
+     */
+    public void changeColor() {
+        // if (col < 9)
+        // setCol(col + 1);
+        // else
+        // setCol(1);
+
     }
 
-    @Override
-    public void setSuspend() {
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public void drawAnimal(Graphics g) {
+        g.setColor(col);
+        if (x_dir == 1) // fish swims to right side
+        {
+            // Body of fish
+            g.fillOval(x_front - size, y_front - size / 4, size, size / 2);
+            // Tail of fish
+            int[] x_t = { x_front - size - size / 4, x_front - size - size / 4, x_front - size };
+            int[] y_t = { y_front - size / 4, y_front + size / 4, y_front };
+            Polygon t = new Polygon(x_t, y_t, 3);
+            g.fillPolygon(t);
+            // Eye of fish
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(new Color(255 - col.getRed(), 255 - col.getGreen(), 255 -
+                    col.getBlue()));
+            g2.fillOval(x_front - size / 5, y_front - size / 10, size / 10, size / 10);
+            // Mouth of fish
+            if (size > 70)
+                g2.setStroke(new BasicStroke(3));
+            else if (size > 30)
+                g2.setStroke(new BasicStroke(2));
+            else
+                g2.setStroke(new BasicStroke(1));
+
+            g2.drawLine(x_front, y_front, x_front - size / 10, y_front + size / 10);
+            g2.setStroke(new BasicStroke(1));
+        } else // fish swims to left side
+        {
+            // Body of fish
+            g.fillOval(x_front, y_front - size / 4, size, size / 2);
+            // Tail of fish
+            int[] x_t = { x_front + size + size / 4, x_front + size + size / 4, x_front + size };
+            int[] y_t = { y_front - size / 4, y_front + size / 4, y_front };
+            Polygon t = new Polygon(x_t, y_t, 3);
+            g.fillPolygon(t);// Eye of fish
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(new Color(255 - col.getRed(), 255 - col.getGreen(), 255 -
+                    col.getBlue()));
+            g2.fillOval(x_front + size / 10, y_front - size / 10, size / 10, size / 10);
+            // Mouth of fish
+            if (size > 70)
+                g2.setStroke(new BasicStroke(3));
+            else if (size > 30)
+                g2.setStroke(new BasicStroke(2));
+            else
+                g2.setStroke(new BasicStroke(1));
+
+            g2.drawLine(x_front, y_front, x_front + size / 10, y_front + size / 10);
+            g2.setStroke(new BasicStroke(1));
         }
     }
 
     @Override
-    public void setResume() {
-        notify();
+    public synchronized void setSuspend() {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            //notify();
+        }
+
+    @Override
+    public synchronized void setResume() {
+        this.notifyAll();
     }
 
     @Override
     public void setBarrier(CyclicBarrier b) {
 
+    }
+
+    @Override
+    public Color getColor() {
+        return col;
     }
 
 }
