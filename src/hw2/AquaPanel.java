@@ -21,6 +21,7 @@ public class AquaPanel extends JPanel {
     private static AquaPanel single_instance = null;
     public HashSet<Swimmable> swimmers = new HashSet<Swimmable>();
     public JPanel buttonPanel=new JPanel();
+    Worm w=new Worm();
     public AquaPanel() {
         buttonPanel.setLayout(new GridLayout());
         setPreferredSize(new Dimension(1200, 700));
@@ -49,6 +50,14 @@ public class AquaPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
+            }
+        });
+
+        food.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                w.isOn=true;
+                repaint();
             }
         });
 
@@ -229,6 +238,9 @@ public class AquaPanel extends JPanel {
         }
         for (Swimmable swimmer : swimmers) {
             swimmer.drawAnimal(g);
+        }
+        if(w.isOn){
+            Worm.drawAnimal(g,this);
         }
     }
 }
