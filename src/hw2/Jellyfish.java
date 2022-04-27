@@ -12,7 +12,7 @@ public class Jellyfish extends Swimmable {
     private int eatCount, x_front, y_front;
     private Color col;
     private int x_dir, y_dir;
-
+    private int dirChange;
     /**
      * constructor given params
      *
@@ -32,6 +32,7 @@ public class Jellyfish extends Swimmable {
         eatCount = 0;
         y_dir = 1;
         x_dir = 1;
+        this.dirChange=-1;
     }
 
     // Getters for each field:
@@ -77,10 +78,34 @@ public class Jellyfish extends Swimmable {
                 y_dir = -1;
             if (getY_front() < 90)
                 y_dir = 1;
-
-            setX_front(getX_front() + (getHorSpeed() * x_dir));
-            setY_front(getY_front() + (getVerSpeed() * y_dir));
-
+            if(AquaPanel.getInstance().w.isOn){
+                if(getX_front()==AquaPanel.getInstance().getWidth()/2||dirChange==2){
+                    dirChange=-1;
+                    AquaPanel.getInstance().w.setOn(false);
+                    eatInc();
+                }
+                if(x_dir==1 && (getX_front()<AquaPanel.getInstance().getWidth()/2)) {
+                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                }
+                else if(x_dir==1&&getX_front()>AquaPanel.getInstance().getWidth()/2){
+                    x_dir=-1;
+                    dirChange++;
+                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                }
+                else if(x_dir==-1 && (getX_front()<AquaPanel.getInstance().getWidth()/2)){
+                    x_dir=1;
+                    dirChange++;
+                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                }
+                else{
+                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                }
+            }
+            else {
+                dirChange=-1;
+                setX_front(getX_front() + (getHorSpeed() * x_dir));
+                setY_front(getY_front() + (getVerSpeed() * y_dir));
+            }
             AquaPanel.getInstance().repaint();
             try {
                 Thread.sleep(10);
@@ -90,7 +115,6 @@ public class Jellyfish extends Swimmable {
             }
         }
     }
-
 
     @Override
     public String getAnimalName() {
