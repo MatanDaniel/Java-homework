@@ -8,8 +8,8 @@ import java.awt.Dimension;
 import hw2.AquaPanel;
 
 public class AquaFrame extends JFrame {
-
-    public static void main(String[] args) {
+    public AquaFrame()
+    {
         JFrame frame = new JFrame("Menu");
         JLabel displayField = new JLabel();
         frame.setVisible(true);
@@ -80,4 +80,11 @@ public class AquaFrame extends JFrame {
             }
         });
     }
+    
+
+    public static void main(String[] args) 
+    {
+        new AquaFrame();
+    }
+        
 }
