@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.*;
@@ -18,6 +17,7 @@ public class AquaPanel extends JPanel {
     private JTable tbl_info;
     private JFrame frame=new JFrame("Info");
     private static BufferedImage image=null;
+    private int totalEatCounter=0;
     private static AquaPanel single_instance = null;
     public HashSet<Swimmable> swimmers = new HashSet<Swimmable>();
     public JPanel buttonPanel=new JPanel();
@@ -56,7 +56,10 @@ public class AquaPanel extends JPanel {
         food.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                w.isOn=true;
+                if(w.isOn==false){
+                    w.isOn=true;
+                    totalEatCounter++;
+                }
                 repaint();
             }
         });
@@ -64,6 +67,8 @@ public class AquaPanel extends JPanel {
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                totalEatCounter=0;
+                w.isOn=false;
                 swimmers.clear();
                 repaint();
             }
@@ -132,7 +137,7 @@ public class AquaPanel extends JPanel {
             frame.setLayout(new BorderLayout());
             tbl_info = getAnimalList();
             JPanel counter = new JPanel();
-            JLabel countLabel = new JLabel("Total Count:" /*+ totalEatCounter*/);
+            JLabel countLabel = new JLabel("Total Count:" + totalEatCounter);
             counter.setLayout(new BorderLayout());
             counter.add(countLabel,BorderLayout.CENTER);
 
