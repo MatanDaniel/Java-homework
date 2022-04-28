@@ -15,13 +15,14 @@ import java.util.*;
 public class AquaPanel extends JPanel {
     private DefaultTableModel tbl_model;
     private JTable tbl_info;
-    private JFrame frame=new JFrame("Info");
-    private static BufferedImage image=null;
-    private int totalEatCounter=0;
+    private JFrame frame = new JFrame("Info");
+    private static BufferedImage image = null;
+    private int totalEatCounter = 0;
     private static AquaPanel single_instance = null;
     public HashSet<Swimmable> swimmers = new HashSet<Swimmable>();
-    public JPanel buttonPanel=new JPanel();
-    Worm w=new Worm();
+    public JPanel buttonPanel = new JPanel();
+    Worm w = new Worm();
+
     public AquaPanel() {
         buttonPanel.setLayout(new GridLayout());
         setPreferredSize(new Dimension(1200, 700));
@@ -41,10 +42,9 @@ public class AquaPanel extends JPanel {
         buttonPanel.add(info);
         buttonPanel.add(exit);
 
-        BorderLayout border=new BorderLayout();
+        BorderLayout border = new BorderLayout();
         this.setLayout(border);
-        this.add(buttonPanel,BorderLayout.SOUTH);
-
+        this.add(buttonPanel, BorderLayout.SOUTH);
 
         exit.addActionListener(new ActionListener() {
             @Override
@@ -56,8 +56,8 @@ public class AquaPanel extends JPanel {
         food.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(w.isOn==false){
-                    w.isOn=true;
+                if (w.isOn == false) {
+                    w.isOn = true;
                     totalEatCounter++;
                 }
                 repaint();
@@ -67,9 +67,12 @@ public class AquaPanel extends JPanel {
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                totalEatCounter=0;
-                w.isOn=false;
+                for (Swimmable swimmable : swimmers) {
+                    swimmable.threadstop(); // stops the thread and fixes the reset bug
+                }
                 swimmers.clear();
+                totalEatCounter = 0;
+                w.isOn = false;
                 repaint();
             }
         });
@@ -77,6 +80,7 @@ public class AquaPanel extends JPanel {
         sleep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 for (Swimmable swimmer : swimmers) {
                     swimmer.setSuspend();
                 }
@@ -84,14 +88,12 @@ public class AquaPanel extends JPanel {
         });
 
         wakeUp.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
                 for (Swimmable swimmer : swimmers) {
                     swimmer.setResume();
                 }
             }
         });
-
 
         info.addActionListener(new ActionListener() {
             @Override
@@ -128,21 +130,20 @@ public class AquaPanel extends JPanel {
         // thread.start();
     }
 
-    public void getInfo(){
-        if(this.frame.isVisible()){
+    public void getInfo() {
+        if (this.frame.isVisible()) {
             this.frame.dispose();
-        }
-        else{
+        } else {
             frame = new JFrame("Info");
             frame.setLayout(new BorderLayout());
             tbl_info = getAnimalList();
             JPanel counter = new JPanel();
             JLabel countLabel = new JLabel("Total Count:" + totalEatCounter);
             counter.setLayout(new BorderLayout());
-            counter.add(countLabel,BorderLayout.CENTER);
+            counter.add(countLabel, BorderLayout.CENTER);
 
-            frame.add(tbl_info,BorderLayout.CENTER);
-            frame.add(counter,BorderLayout.SOUTH);
+            frame.add(tbl_info, BorderLayout.CENTER);
+            frame.add(counter, BorderLayout.SOUTH);
 
             frame.pack();
             frame.setLocationRelativeTo(null);
@@ -151,7 +152,7 @@ public class AquaPanel extends JPanel {
 
     }
 
-    public JTable getAnimalList(){
+    public JTable getAnimalList() {
         DefaultTableModel tbl = new DefaultTableModel();
         tbl.addColumn("Animal Name");
         tbl.addColumn("Color");
@@ -159,45 +160,46 @@ public class AquaPanel extends JPanel {
         tbl.addColumn("Hor.Speed");
         tbl.addColumn("Var.Speed");
         tbl.addColumn("Eat Count");
-        Object[] columns = {"Name", "Color", "Size", "Hor.Speed", "Var.Speed",
-                "Eat Counter"};
+        Object[] columns = { "Name", "Color", "Size", "Hor.Speed", "Var.Speed",
+                "Eat Counter" };
         tbl.addRow(columns);
-        Object[] space = {"----------", "----------", "----------", "----------", "----------","----------"};
+        Object[] space = { "----------", "----------", "----------", "----------", "----------", "----------" };
         tbl.addRow(space);
 
         for (Swimmable obj : this.swimmers) {
-            String tmpColor="";
+            String tmpColor = "";
             if (obj instanceof Swimmable) {
-                //Color to string
-                if(Color.BLACK.equals(obj.getColor())){
-                    tmpColor="Black";
+                // Color to string
+                if (Color.BLACK.equals(obj.getColor())) {
+                    tmpColor = "Black";
                 }
-                if(Color.RED.equals(obj.getColor())){
-                    tmpColor="Red";
+                if (Color.RED.equals(obj.getColor())) {
+                    tmpColor = "Red";
                 }
-                if(Color.BLUE.equals(obj.getColor())){
-                    tmpColor="Blue";
+                if (Color.BLUE.equals(obj.getColor())) {
+                    tmpColor = "Blue";
                 }
-                if(Color.GREEN.equals(obj.getColor())){
-                    tmpColor="Green";
+                if (Color.GREEN.equals(obj.getColor())) {
+                    tmpColor = "Green";
                 }
-                if(Color.CYAN.equals(obj.getColor())){
-                    tmpColor="Cyan";
+                if (Color.CYAN.equals(obj.getColor())) {
+                    tmpColor = "Cyan";
                 }
-                if(Color.ORANGE.equals(obj.getColor())){
-                    tmpColor="Orange";
+                if (Color.ORANGE.equals(obj.getColor())) {
+                    tmpColor = "Orange";
                 }
-                if(Color.YELLOW.equals(obj.getColor())){
-                    tmpColor="Yellow";
+                if (Color.YELLOW.equals(obj.getColor())) {
+                    tmpColor = "Yellow";
                 }
-                if(Color.MAGENTA.equals(obj.getColor())){
-                    tmpColor="Magenta";
+                if (Color.MAGENTA.equals(obj.getColor())) {
+                    tmpColor = "Magenta";
                 }
-                if(Color.PINK.equals(obj.getColor())){
-                    tmpColor="Pink";
+                if (Color.PINK.equals(obj.getColor())) {
+                    tmpColor = "Pink";
                 }
-                Object[] row = {((Swimmable) obj).getAnimalName(), tmpColor, ((Swimmable) obj).getSize(),
-                        ((Swimmable) obj).getHorSpeed(), ((Swimmable) obj).getVerSpeed(), ((Swimmable) obj).getEatCount()
+                Object[] row = { ((Swimmable) obj).getAnimalName(), tmpColor, ((Swimmable) obj).getSize(),
+                        ((Swimmable) obj).getHorSpeed(), ((Swimmable) obj).getVerSpeed(),
+                        ((Swimmable) obj).getEatCount()
                 };
                 tbl.addRow(row);
             }
@@ -207,22 +209,22 @@ public class AquaPanel extends JPanel {
         return info;
     }
 
-    public void changeBackground(String msg){
-        if(msg == "image"){
-                try{
-                    image = ImageIO.read(AquaPanel.class.getResourceAsStream("image.jpg"));
-                    repaint();
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
+    public void changeBackground(String msg) {
+        if (msg == "image") {
+            try {
+                image = ImageIO.read(AquaPanel.class.getResourceAsStream("image.jpg"));
+                repaint();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        if(msg=="blue"){
-            image=null;
+        }
+        if (msg == "blue") {
+            image = null;
             this.setBackground(Color.BLUE);
             SwingUtilities.updateComponentTreeUI(this);
         }
-        if(msg=="white"){
-            image=null;
+        if (msg == "white") {
+            image = null;
             this.setBackground(Color.WHITE);
             SwingUtilities.updateComponentTreeUI(this);
         }
@@ -238,14 +240,14 @@ public class AquaPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(image!=null){
-            g.drawImage(image,0,0,getWidth(),getHeight(),this);
+        if (image != null) {
+            g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
         }
         for (Swimmable swimmer : swimmers) {
             swimmer.drawAnimal(g);
         }
-        if(w.isOn){
-            Worm.drawAnimal(g,this);
+        if (w.isOn) {
+            Worm.drawAnimal(g, this);
         }
     }
 }
