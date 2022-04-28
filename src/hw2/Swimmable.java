@@ -10,6 +10,7 @@ import java.util.concurrent.CyclicBarrier;
 
 public abstract class Swimmable extends Thread {
     protected boolean runable = false;
+    protected boolean isalive = true;
     /**
      * horizontal speed
      */
@@ -147,5 +148,6 @@ public abstract class Swimmable extends Thread {
     abstract public void setResume();
 
     abstract public void setBarrier(CyclicBarrier b);
+    abstract public void threadstop();
 
 }
