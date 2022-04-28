@@ -1,6 +1,7 @@
 package hw2;
 
 import java.awt.*;
+import java.util.HashSet;
 import java.util.concurrent.CyclicBarrier;
 
 /**
@@ -68,8 +69,8 @@ public class Jellyfish extends Swimmable {
     @Override
     public void run() {
         while (true) {
+            if(runable == false){
 
-            super.run();
             if (getX_front() > 1150)
                 x_dir = -1;
             if (getX_front() <50)
@@ -113,6 +114,15 @@ public class Jellyfish extends Swimmable {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        }
+        else{
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
         }
     }
 
@@ -255,19 +265,13 @@ public class Jellyfish extends Swimmable {
                     y_front + size / 3);
     }
 
-    @Override
     public void setSuspend() {
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+       runable = true;
     }
 
     @Override
     public void setResume() {
-        notify();
+        runable = false;
     }
 
     @Override
