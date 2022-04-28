@@ -1,6 +1,7 @@
 package hw2;
 
 import java.awt.*;
+import java.util.HashSet;
 import java.util.concurrent.CyclicBarrier;
 
 /**
@@ -8,6 +9,7 @@ import java.util.concurrent.CyclicBarrier;
  */
 
 public abstract class Swimmable extends Thread {
+    protected boolean runable = false;
     /**
      * horizontal speed
      */
@@ -140,7 +142,7 @@ public abstract class Swimmable extends Thread {
 
     abstract public void drawAnimal(Graphics g);
 
-    abstract public void setSuspend();
+    abstract public  void  setSuspend();
 
     abstract public void setResume();
 
