@@ -68,9 +68,9 @@ public class Jellyfish extends Swimmable {
 
     @Override
     public void run() {
-        while (true) {
-            if(runable == false){
+        while (isalive) {
 
+            if(runable == false){
             if (getX_front() > 1150)
                 x_dir = -1;
             if (getX_front() <50)
@@ -278,5 +278,8 @@ public class Jellyfish extends Swimmable {
     public void setBarrier(CyclicBarrier b) {
 
     }
+
+    @Override
+    public void threadstop() {isalive =false; }
 
 }
