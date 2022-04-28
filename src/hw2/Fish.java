@@ -45,8 +45,7 @@ public class Fish extends Swimmable {
 
     @Override
     public void run() {
-        while (true) {
-
+        while (isalive) {
             if (runable == false)
              {
                 if (getX_front() > 1150)
@@ -87,8 +86,7 @@ public class Fish extends Swimmable {
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                }
-                
+                } 
             }
             else{
                 try {
@@ -343,5 +341,8 @@ public class Fish extends Swimmable {
     public Color getColor() {
         return col;
     }
+
+    @Override
+    public void threadstop() {isalive = false;}
 
 }
