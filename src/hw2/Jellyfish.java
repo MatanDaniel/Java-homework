@@ -2,6 +2,7 @@ package hw2;
 
 import java.awt.*;
 import java.util.HashSet;
+import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 /**
@@ -68,9 +69,22 @@ public class Jellyfish extends Swimmable {
 
     @Override
     public void run() {
-        while (isalive) {
-
-            if(runable == false){
+        while (running) {
+            synchronized (pauseLock) {
+                if (!running) {
+                    break;
+                }
+                if (paused) {
+                    try {
+                        pauseLock.wait();
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                    if (!running) {
+                        break;
+                    }
+                }
+            }
             if (getX_front() > 1150)
                 x_dir = -1;
             if (getX_front() <50)
@@ -80,6 +94,15 @@ public class Jellyfish extends Swimmable {
             if (getY_front() < 90)
                 y_dir = 1;
             if(AquaPanel.getInstance().w.isOn){
+                try{
+                    cb.await();
+                }
+                catch (InterruptedException e) {
+                    return;
+                }
+                catch (BrokenBarrierException e){
+                    return;
+                }
                 if(getX_front()==AquaPanel.getInstance().getWidth()/2||dirChange==2){
                     dirChange=-1;
                     AquaPanel.getInstance().w.setOn(false);
@@ -115,16 +138,8 @@ public class Jellyfish extends Swimmable {
                 e.printStackTrace();
             }
         }
-        else{
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        }
     }
+
 
     @Override
     public String getAnimalName() {
@@ -132,7 +147,7 @@ public class Jellyfish extends Swimmable {
     }
 
     /**
-     * getter (future use)
+     * getter
      */
     @Override
     public int getEatCount() {
@@ -140,28 +155,28 @@ public class Jellyfish extends Swimmable {
     }
 
     /**
-     * getter (future use)
+     * getter
      */
     public int getX_front() {
         return x_front;
     }
 
     /**
-     * getter (future use)
+     * getter
      */
     public int getY_front() {
         return y_front;
     }
 
     /**
-     * getter (future use)
+     * getter
      */
     public int getX_dir() {
         return x_dir;
     }
 
     /**
-     * getter (future use)
+     * getter
      */
     public int getY_dir() {
         return y_dir;
@@ -229,7 +244,7 @@ public class Jellyfish extends Swimmable {
     }
 
     /**
-     * setter future use
+     * setter
      *
      * @param y_dir
      */
@@ -266,20 +281,23 @@ public class Jellyfish extends Swimmable {
     }
 
     public void setSuspend() {
-       runable = true;
+        paused=true;
     }
 
     @Override
     public void setResume() {
-        runable = false;
+        synchronized (pauseLock){
+            paused=false;
+            pauseLock.notifyAll();
+        }
     }
 
     @Override
     public void setBarrier(CyclicBarrier b) {
-
+        this.cb=b;
     }
 
-    @Override
-    public void threadstop() {isalive =false; }
+    //@Override
+    public void reset() {running =false; }
 
 }
