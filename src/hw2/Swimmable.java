@@ -9,8 +9,9 @@ import java.util.concurrent.CyclicBarrier;
  */
 
 public abstract class Swimmable extends Thread {
-    protected boolean runable = false;
-    protected boolean isalive = true;
+    protected volatile boolean running=true;
+    protected volatile boolean paused=false;
+    protected final Object pauseLock=new Object();
     /**
      * horizontal speed
      */
@@ -19,6 +20,7 @@ public abstract class Swimmable extends Thread {
      * vertical speed
      */
     protected int verSpeed;
+    protected CyclicBarrier cb;
 
     /**
      * Default constructor
@@ -148,6 +150,6 @@ public abstract class Swimmable extends Thread {
     abstract public void setResume();
 
     abstract public void setBarrier(CyclicBarrier b);
-    abstract public void threadstop();
+    abstract public void reset();
 
 }
