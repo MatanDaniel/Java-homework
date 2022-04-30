@@ -3,7 +3,6 @@ package hw2;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.*;
+import java.util.concurrent.CyclicBarrier;
 
 public class AquaPanel extends JPanel {
     private DefaultTableModel tbl_model;
@@ -22,7 +22,7 @@ public class AquaPanel extends JPanel {
     public HashSet<Swimmable> swimmers = new HashSet<Swimmable>();
     public JPanel buttonPanel = new JPanel();
     Worm w = new Worm();
-
+    boolean isPaused=false;
     public AquaPanel() {
         buttonPanel.setLayout(new GridLayout());
         setPreferredSize(new Dimension(1200, 700));
@@ -56,6 +56,16 @@ public class AquaPanel extends JPanel {
         food.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(swimmers.size()!=0) {
+                    CyclicBarrier cb = new CyclicBarrier(swimmers.size());
+                    for (Swimmable swimmer : swimmers) {
+                        swimmer.setBarrier(cb);
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, " No fish to feed! add fish first!");
+                    return;
+                }
                 if (w.isOn == false) {
                     w.isOn = true;
                     totalEatCounter++;
@@ -67,8 +77,8 @@ public class AquaPanel extends JPanel {
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (Swimmable swimmable : swimmers) {
-                    swimmable.threadstop(); // stops the thread and fixes the reset bug
+                for (Swimmable swimmer:swimmers) {
+                    swimmer.reset(); // stops the threads
                 }
                 swimmers.clear();
                 totalEatCounter = 0;
@@ -80,15 +90,16 @@ public class AquaPanel extends JPanel {
         sleep.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                isPaused=true;
                 for (Swimmable swimmer : swimmers) {
                     swimmer.setSuspend();
                 }
-            };
+            }
         });
 
         wakeUp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                isPaused=false;
                 for (Swimmable swimmer : swimmers) {
                     swimmer.setResume();
                 }
@@ -108,26 +119,6 @@ public class AquaPanel extends JPanel {
                 new AddAnimalDialog();
             }
         });
-
-        // Thread thread = new Thread(new Runnable() {
-        // @Override
-        // public void run() {
-        // while (true) {
-        // try {
-        // for (Swimmable swimmer : swimmers) {
-        // swimmer.
-        // }
-        // repaint();
-        // Thread.sleep(100);
-        // } catch (InterruptedException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // }
-        // }
-        // });
-
-        // thread.start();
     }
 
     public void getInfo() {
