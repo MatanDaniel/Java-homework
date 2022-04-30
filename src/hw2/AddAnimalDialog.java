@@ -49,7 +49,7 @@ public class AddAnimalDialog extends JDialog {
 
         // ActionListeners
         submitButton.addActionListener(new submitButtonActionListener());
-
+        dialog.getRootPane().setDefaultButton(submitButton);
         dialog.add(panel);
         dialog.setVisible(true);
         dialog.setLocationRelativeTo(null);
@@ -58,12 +58,6 @@ public class AddAnimalDialog extends JDialog {
     private class submitButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO: add validations to the form
-            System.out
-                    .println("properties: " + "\ntype: " + animalList.getSelectedItem() + "\nsize: " + sizeTextField.getText()
-                            + "\nhorizontal velocity: " + horSpeedTextField.getText()
-                            + "\nvertical velocity: " + verSpeedTextField.getText() + "\ncolor: " + colorList.getSelectedItem());
-
             // Transferring elements into variables to save code line:
             String type = animalList.getSelectedItem().toString();
             int size = Integer.parseInt(sizeTextField.getText());
@@ -121,12 +115,16 @@ public class AddAnimalDialog extends JDialog {
                 }
                 if (type == "Fish") {
                     Fish fish = new Fish(size, 100, 100, horSpeed, verSpeed, col);
-
+                    if(aquaPanel.isPaused){
+                        fish.paused=true;
+                    }
                     aquaPanel.swimmers.add(fish);
                     fish.start();
                 } else {
                     Jellyfish jellyFish = new Jellyfish(size, 100, 100, horSpeed, verSpeed, col);
-
+                    if(aquaPanel.isPaused){
+                        jellyFish.paused=true;
+                    }
                     aquaPanel.swimmers.add(jellyFish);
                     jellyFish.start();
                 }
