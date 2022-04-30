@@ -3,7 +3,6 @@ package hw2;
 import java.awt.*;
 
 public class Worm{
-    private int x_front, y_front, x_dir, y_dir;
     public boolean isOn=false;
     public Worm(){}
 
