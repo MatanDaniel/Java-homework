@@ -12,7 +12,6 @@ public class Fish extends Swimmable {
     private Color col;
     private int eatCount;
     private int x_front, y_front, x_dir, y_dir;
-    private int dirChange;
 
     /**
      * default constructor
@@ -41,7 +40,6 @@ public class Fish extends Swimmable {
         this.y_dir = 1;
         this.x_dir = 1;
         this.eatCount = 0;
-        this.dirChange = -1;
     }
 
     @Override
@@ -62,55 +60,79 @@ public class Fish extends Swimmable {
                     }
                 }
             }
-                    if (getX_front() > 1150)
-                        x_dir = -1;
-                    if (getX_front() < 50)
-                        x_dir = 1;
-                    if (getY_front() > 660)
-                        y_dir = -1;
-                    if (getY_front() < 90)
-                        y_dir = 1;
-                    if (AquaPanel.getInstance().w.isOn) {
-                        try{
-                            cb.await();
-                        }
-                        catch (InterruptedException e) {
-                            return;
-                        }
-                        catch (BrokenBarrierException e){
-                            return;
-                        }
-                        if (getX_front() == AquaPanel.getInstance().getWidth() / 2 || dirChange == 2) {
-                            dirChange = -1;
-                            AquaPanel.getInstance().w.setOn(false);
-                            eatInc();
-                        }
-                        if (x_dir == 1 && (getX_front() < AquaPanel.getInstance().getWidth() / 2)) {
-                            setX_front(getX_front() + getHorSpeed() * x_dir);
-                        } else if (x_dir == 1 && getX_front() > AquaPanel.getInstance().getWidth() / 2) {
-                            x_dir = -1;
-                            dirChange++;
-                            setX_front(getX_front() + getHorSpeed() * x_dir);
-                        } else if (x_dir == -1 && (getX_front() < AquaPanel.getInstance().getWidth() / 2)) {
-                            x_dir = 1;
-                            dirChange++;
-                            setX_front(getX_front() + getHorSpeed() * x_dir);
-                        } else {
-                            setX_front(getX_front() + getHorSpeed() * x_dir);
-                        }
-                    } else {
-                        dirChange = -1;
-                        setX_front(getX_front() + (getHorSpeed() * x_dir));
-                        setY_front(getY_front() + (getVerSpeed() * y_dir));
-                    }
-                    AquaPanel.getInstance().repaint();
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+            if (getX_front() > 1150)
+                x_dir = -1;
+            if (getX_front() < 50)
+                x_dir = 1;
+            if (getY_front() > 660)
+                y_dir = -1;
+            if (getY_front() < 90)
+                y_dir = 1;
+            if (AquaPanel.getInstance().w.isOn) {
+                try{
+                    cb.await();
                 }
+                catch (InterruptedException e) {
+                    return;
+                }
+                catch (BrokenBarrierException e){
+                    return;
+                }
+                if (((getY_front()>=AquaPanel.getInstance().getHeight()/2-6)&&(getY_front()<=AquaPanel.getInstance().getHeight()/2+6)&& ((getX_front() >= AquaPanel.getInstance().getWidth() / 2-6)&&(getX_front()<=AquaPanel.getInstance().getWidth()/2+6)))) {
+                    AquaPanel.getInstance().w.setOn(false);
+                    eatInc();
+                }
+                if (x_dir == 1 && (getX_front() < AquaPanel.getInstance().getWidth() / 2)) {
+                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                    if(getY_front()<AquaPanel.getInstance().getHeight()/2) {
+                        y_dir=1;
+                    }
+                    else{
+                        y_dir=-1;
+                    }
+                    setY_front(getY_front()+getVerSpeed()*y_dir);
+                } else if (x_dir == 1 && getX_front() > AquaPanel.getInstance().getWidth() / 2) {
+                    x_dir = -1;
+                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                    if(getY_front()<AquaPanel.getInstance().getHeight()/2) {
+                        y_dir=1;
+                    }
+                    else{
+                        y_dir=-1;
+                    }
+                    setY_front(getY_front()+getVerSpeed()*y_dir);
+                } else if (x_dir == -1 && (getX_front() < AquaPanel.getInstance().getWidth() / 2)) {
+                    x_dir = 1;
+                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                    if(getY_front()<AquaPanel.getInstance().getHeight()/2) {
+                        y_dir=1;
+                    }
+                    else{
+                        y_dir=-1;
+                    }
+                    setY_front(getY_front()+getVerSpeed()*y_dir);
+                } else {
+                    setX_front(getX_front() + getHorSpeed() * x_dir);
+                    if(getY_front()<AquaPanel.getInstance().getHeight()/2) {
+                        y_dir=1;
+                    }
+                    else{
+                        y_dir=-1;
+                    }
+                    setY_front(getY_front()+getVerSpeed()*y_dir);
+                }
+            } else {
+                setX_front(getX_front() + (getHorSpeed() * x_dir));
+                setY_front(getY_front() + (getVerSpeed() * y_dir));
+            }
+            AquaPanel.getInstance().repaint();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getAnimalName() {
