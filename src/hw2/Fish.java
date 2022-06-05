@@ -1,9 +1,10 @@
+import javax.swing.*;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public class Fish extends Swimmable {
+public class Fish extends Swimmable implements MarineAnimal {
     private static final int EAT_DISTANCE = 4;
     private int size;
     private Color col;
@@ -351,11 +352,16 @@ public class Fish extends Swimmable {
             if (y_front + size/2 <= 0) y_dir = 1;
         }
 
-
-
         if (Worm.getInstance().isNearFood(g, this)) {
             Worm.getInstance().setFoodPlaced(false);
             eatInc();
         }
+    }
+
+
+
+    @Override
+    public void PaintFish() {
+
     }
 }
