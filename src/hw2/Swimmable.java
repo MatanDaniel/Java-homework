@@ -1,5 +1,3 @@
-package hw2;
-
 import java.awt.*;
 import java.util.HashSet;
 import java.util.concurrent.CyclicBarrier;
@@ -8,10 +6,12 @@ import java.util.concurrent.CyclicBarrier;
  * * @author Matan Daniel, 315783522 and Ron Bar-Zvi, 304969520
  */
 
-public abstract class Swimmable extends Thread {
+public abstract class Swimmable extends Thread implements SeaCreature {
     protected volatile boolean running=true;
     protected volatile boolean paused=false;
     protected final Object pauseLock=new Object();
+    protected int x_front, y_front, x_dir, y_dir;
+
     /**
      * horizontal speed
      */
@@ -143,13 +143,12 @@ public abstract class Swimmable extends Thread {
         return this.horSpeed == swimmable.getHorSpeed() && this.verSpeed == swimmable.getVerSpeed();
     }
 
-    abstract public void drawAnimal(Graphics g);
-
     abstract public  void  setSuspend();
 
     abstract public void setResume();
 
     abstract public void setBarrier(CyclicBarrier b);
     abstract public void reset();
+
 
 }
