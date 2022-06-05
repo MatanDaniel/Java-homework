@@ -1,27 +1,19 @@
-package hw2;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.*;
+import java.util.Objects;
 import java.util.concurrent.CyclicBarrier;
 
-public class AquaPanel extends JPanel {
-    private DefaultTableModel tbl_model;
-    private JTable tbl_info;
+public class AquaPanel extends JPanel implements Runnable{
     private JFrame frame = new JFrame("Info");
     private static BufferedImage image = null;
     private int totalEatCounter = 0;
-    private static AquaPanel single_instance = null;
-    public HashSet<Swimmable> swimmers = new HashSet<Swimmable>();
+    public HashSet<SeaCreature> seaCreatures = new HashSet<>();
     public JPanel buttonPanel = new JPanel();
-    Worm w = new Worm();
     boolean isPaused=false;
     public AquaPanel() {
         buttonPanel.setLayout(new GridLayout());
@@ -46,79 +38,48 @@ public class AquaPanel extends JPanel {
         this.setLayout(border);
         this.add(buttonPanel, BorderLayout.SOUTH);
 
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        exit.addActionListener(e -> System.exit(0));
+        food.addActionListener(e -> placeFood());
+        reset.addActionListener(e -> resetAll());
+        sleep.addActionListener(e -> sleepAll());
+        wakeUp.addActionListener(e -> wakeAll());
+        info.addActionListener(e -> getInfo());
+        addAnimal.addActionListener(e -> new AddAnimalDialog(this));
 
-        food.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(swimmers.size()!=0) {
-                    CyclicBarrier cb = new CyclicBarrier(swimmers.size());
-                    for (Swimmable swimmer : swimmers) {
-                        swimmer.setBarrier(cb);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, " No fish to feed! add fish first!");
-                    return;
-                }
-                if (w.isOn == false) {
-                    w.isOn = true;
-                    totalEatCounter++;
-                }
-                repaint();
-            }
-        });
+    }
 
-        reset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (Swimmable swimmer:swimmers) {
-                    swimmer.reset(); // stops the threads
-                }
-                swimmers.clear();
-                totalEatCounter = 0;
-                w.isOn = false;
-                repaint();
-            }
-        });
+    private void placeFood() {
+        if(seaCreatures.size()!=0) {
+            CyclicBarrier cb = new CyclicBarrier((int) seaCreatures.stream().filter(e -> e instanceof Swimmable).count());
+            seaCreatures.stream().filter(e -> e instanceof Swimmable).forEach(e -> ((Swimmable) e).setBarrier(cb));
+        }
+        else{
+            JOptionPane.showMessageDialog(null, " No fish to feed! add fish first!");
+            return;
+        }
+        if (!Worm.getInstance().foodPlaced) {
+            Worm.getInstance().foodPlaced = true;
+            totalEatCounter++;
+        }
+    }
 
-        sleep.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                isPaused=true;
-                for (Swimmable swimmer : swimmers) {
-                    swimmer.setSuspend();
-                }
-            }
-        });
+    private void resetAll() {
+        seaCreatures.clear();
+        totalEatCounter = 0;
+        Worm.getInstance().foodPlaced = false;
+        repaint();
+    }
 
-        wakeUp.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                isPaused=false;
-                for (Swimmable swimmer : swimmers) {
-                    swimmer.setResume();
-                }
-            }
-        });
+    private void sleepAll() {
+        isPaused=true;
+        seaCreatures.stream().filter(e -> e instanceof Swimmable).forEach(e -> ((Swimmable) e).setSuspend());
 
-        info.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getInfo();
-            }
-        });
+    }
 
-        addAnimal.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new AddAnimalDialog();
-            }
-        });
+    private void wakeAll() {
+        isPaused=false;
+        seaCreatures.stream().filter(e -> e instanceof Swimmable).forEach(e -> ((Swimmable) e).setResume());
+
     }
 
     public void getInfo() {
@@ -127,7 +88,7 @@ public class AquaPanel extends JPanel {
         } else {
             frame = new JFrame("Info");
             frame.setLayout(new BorderLayout());
-            tbl_info = getAnimalList();
+            JTable tbl_info = getAnimalList();
             JPanel counter = new JPanel();
             JLabel countLabel = new JLabel("Total Count:" + totalEatCounter);
             counter.setLayout(new BorderLayout());
@@ -157,9 +118,9 @@ public class AquaPanel extends JPanel {
         Object[] space = { "----------", "----------", "----------", "----------", "----------", "----------" };
         tbl.addRow(space);
 
-        for (Swimmable obj : this.swimmers) {
+        for (var sc : this.seaCreatures) {
             String tmpColor = "";
-            if (obj instanceof Swimmable) {
+            if (sc instanceof Swimmable obj) {
                 // Color to string
                 if (Color.BLACK.equals(obj.getColor())) {
                     tmpColor = "Black";
@@ -196,36 +157,28 @@ public class AquaPanel extends JPanel {
             }
 
         }
-        JTable info = new JTable(tbl);
-        return info;
+        return new JTable(tbl);
     }
 
     public void changeBackground(String msg) {
-        if (msg == "image") {
+        if (msg.equals("image")) {
             try {
-                image = ImageIO.read(AquaPanel.class.getResourceAsStream("image.jpg"));
+                image = ImageIO.read(Objects.requireNonNull(AquaPanel.class.getResourceAsStream("image.jpg")));
                 repaint();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if (msg == "blue") {
+        if (msg.equals("blue")) {
             image = null;
             this.setBackground(Color.BLUE);
             SwingUtilities.updateComponentTreeUI(this);
         }
-        if (msg == "white") {
+        if (msg.equals("white")) {
             image = null;
             this.setBackground(Color.WHITE);
             SwingUtilities.updateComponentTreeUI(this);
         }
-    }
-
-    public static AquaPanel getInstance() {
-        if (single_instance == null)
-            single_instance = new AquaPanel();
-
-        return single_instance;
     }
 
     @Override
@@ -234,11 +187,25 @@ public class AquaPanel extends JPanel {
         if (image != null) {
             g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
         }
-        for (Swimmable swimmer : swimmers) {
-            swimmer.drawAnimal(g);
-        }
-        if (w.isOn) {
+
+        //Draw all creatures on screen
+        seaCreatures.forEach(swimmer -> swimmer.drawCreature(g));
+
+        if (Worm.getInstance().foodPlaced) {
             Worm.drawAnimal(g, this);
+        }
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            this.repaint();
+            try {
+                Thread.sleep(16);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }
