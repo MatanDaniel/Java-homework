@@ -1,5 +1,3 @@
-package hw2;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,18 +6,19 @@ import java.awt.GridLayout;
 
 public class AddAnimalDialog extends JDialog {
 
-    private static String[] animals = { "Fish", "Jelly Fish" };
-    private static String[] colors = { "Black", "Red", "Blue", "Green", "Cyan", "Orange", "Yellow", "Magenta", "Pink" };
-
-    JComboBox animalList = new JComboBox<>(animals);
-    JTextField sizeTextField = new JTextField(10);
-    JTextField horSpeedTextField = new JTextField(10);
-    JTextField verSpeedTextField = new JTextField(10);
-    JComboBox colorList = new JComboBox<>(colors);
+    private static final String[] animals = { "Leminaria","Zostera","Fish", "Jellyfish" };
+    private static final String[] colors = { "Black", "Red", "Blue", "Green", "Cyan", "Orange", "Yellow", "Magenta", "Pink" };
+    AquaPanel aquaPanel;
+    JComboBox<String> animalList = new JComboBox<>(animals);
+    public JTextField sizeTextField = new JTextField(10);
+    public JTextField horSpeedTextField = new JTextField(10);
+    public JTextField verSpeedTextField = new JTextField(10);
+    JComboBox<String> colorList = new JComboBox<>(colors);
     JButton submitButton = new JButton("Submit");
     JDialog dialog= new JDialog();
 
-    public AddAnimalDialog() {
+    public AddAnimalDialog(AquaPanel panel) {
+        aquaPanel = panel;
         this.createDialog();
     }
 
@@ -48,52 +47,20 @@ public class AddAnimalDialog extends JDialog {
         panel.add(submitButton);
 
         // ActionListeners
-        submitButton.addActionListener(new submitButtonActionListener());
+        submitButton.addActionListener(e -> SubmitButton());
         dialog.getRootPane().setDefaultButton(submitButton);
         dialog.add(panel);
         dialog.setVisible(true);
         dialog.setLocationRelativeTo(null);
     }
 
-    private class submitButtonActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public void SubmitButton(){
             // Transferring elements into variables to save code line:
             String type = animalList.getSelectedItem().toString();
             int size = Integer.parseInt(sizeTextField.getText());
             int horSpeed = Integer.parseInt(horSpeedTextField.getText());
             int verSpeed = Integer.parseInt(verSpeedTextField.getText());
-            String tmp = colorList.getSelectedItem().toString();
-            Color col = null;
-            switch(tmp){
-                case "Black":
-                    col=Color.BLACK;
-                    break;
-                case "Red":
-                    col=Color.red;
-                    break;
-                case "Blue":
-                    col=Color.BLUE;
-                    break;
-                case "Green":
-                    col=Color.GREEN;
-                    break;
-                case "Cyan":
-                    col=Color.cyan;
-                    break;
-                case "Orange":
-                    col=Color.orange;
-                    break;
-                case "Yellow":
-                    col=Color.YELLOW;
-                    break;
-                case "Magenta":
-                    col=Color.magenta;
-                    break;
-                case "Pink":
-                    col=Color.PINK;
-                    break;
-            }
+            Color col = getColor();
 
             // validations for each field:
             if (size < 20 || size > 320)
@@ -102,36 +69,42 @@ public class AddAnimalDialog extends JDialog {
                 JOptionPane.showMessageDialog(null, "Error: Animal's horizontal velocity must be between 1-10!");
             if (verSpeed < 1 || verSpeed > 10)
                 JOptionPane.showMessageDialog(null, "Error: Animal's vertical velocity must be between 1-10!");
-
             // TODO: color - string -> int
-
             if (!(size < 20 || size > 320) && !(horSpeed < 1 || horSpeed > 10) && !(verSpeed < 1 || verSpeed > 10)) {
 
-                AquaPanel aquaPanel = AquaPanel.getInstance();
-
-                if (aquaPanel.swimmers.size() >= 5) {
+                if (aquaPanel.seaCreatures.size() >= 5) {
                     JOptionPane.showMessageDialog(null, "Error: Can't add more than 5 animals!");
                     return;
                 }
-                if (type == "Fish") {
-                    Fish fish = new Fish(size, 100, 100, horSpeed, verSpeed, col);
-                    if(aquaPanel.isPaused){
-                        fish.paused=true;
-                    }
-                    aquaPanel.swimmers.add(fish);
-                    fish.start();
-                } else {
-                    Jellyfish jellyFish = new Jellyfish(size, 100, 100, horSpeed, verSpeed, col);
-                    if(aquaPanel.isPaused){
-                        jellyFish.paused=true;
-                    }
-                    aquaPanel.swimmers.add(jellyFish);
-                    jellyFish.start();
-                }
-                dialog.dispose();
-                aquaPanel.repaint();
+
+                AnimalFactory factory1 = new AnimalFactory(this);
+                Swimmable fac = (Swimmable) factory1.produceSeaCreature(type);
+                if(aquaPanel.isPaused)
+                    fac.paused = true;
+                aquaPanel.seaCreatures.add(fac);
+
+                PlantFactory plantFac = new PlantFactory(this);
+                Immobile creature = (Immobile) plantFac.produceSeaCreature(type);
+
+                fac.start();
+                this.dispose();
             }
         }
+
+    public Color getColor() {
+        String tmp = colorList.getSelectedItem().toString();
+        return switch (tmp) {
+            case "Black" -> Color.BLACK;
+            case "Red" -> Color.red;
+            case "Blue" -> Color.BLUE;
+            case "Green" -> Color.GREEN;
+            case "Cyan" -> Color.cyan;
+            case "Orange" -> Color.orange;
+            case "Yellow" -> Color.YELLOW;
+            case "Magenta" -> Color.magenta;
+            case "Pink" -> Color.PINK;
+            default -> null;
+        };
     }
 
 }
