@@ -1,11 +1,10 @@
 import java.awt.*;
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 /**
  * * @author Matan Daniel, 315783522 and Ron Bar-Zvi, 304969520
  */
-public class Jellyfish extends Swimmable {
+public class Jellyfish extends Swimmable implements MarineAnimal {
     private static final int EAT_DISTANCE = 4;
     private int size;
     private int eatCount;
@@ -87,9 +86,7 @@ public class Jellyfish extends Swimmable {
                     exception.printStackTrace();
                 }
             }
-
             moveJellyFish();
-
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -163,9 +160,8 @@ public class Jellyfish extends Swimmable {
      *
      * @param col color of jellyfish
      */
-    public boolean setCol(Color col) {
+    public void setCol(Color col) {
         this.col = col;
-        return true;
     }
 
     /**
@@ -276,5 +272,14 @@ public class Jellyfish extends Swimmable {
             Worm.getInstance().setFoodPlaced(false);
             eatInc();
         }
+    }
+
+
+    @Override
+    public void PaintFish(SeaCreature creature, Color col){
+        if (!(creature instanceof Immobile))
+        ((Swimmable)creature).setColor(c);
+
+
     }
 }
