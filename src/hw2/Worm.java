@@ -1,13 +1,30 @@
-package hw2;
-
 import java.awt.*;
 
-public class Worm{
-    public boolean isOn=false;
-    public Worm(){}
+public class Worm {
+    public boolean foodPlaced =false;
+    private Worm() {
+        instance = this;
+    }
 
-    public void setOn(boolean on) {
-        isOn = on;
+    private static Worm instance;
+
+    public static Worm getInstance() {
+        if (instance == null) return new Worm();
+        return instance;
+    }
+
+    public boolean isNearFood(Graphics g, Swimmable swimmable) {
+        int x1 = g.getClipBounds().width / 2, y1 = g.getClipBounds().height / 2;
+
+        int x2 = swimmable.x_front, y2 = swimmable.y_front;
+
+        var distance_squared = (x2 - x1)^2 + (y2 -y1)^2;
+        return Math.sqrt(distance_squared) <= 3;
+    }
+
+
+    public void setFoodPlaced(boolean foodPlaced) {
+        this.foodPlaced = foodPlaced;
     }
 
     public static void drawAnimal(Graphics g, AquaPanel panel){
