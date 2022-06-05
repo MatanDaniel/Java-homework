@@ -1,7 +1,4 @@
-package hw2;
-
 import java.awt.*;
-import java.util.HashSet;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -11,9 +8,8 @@ import java.util.concurrent.CyclicBarrier;
 public class Jellyfish extends Swimmable {
     private static final int EAT_DISTANCE = 4;
     private int size;
-    private int eatCount, x_front, y_front;
+    private int eatCount;
     private Color col;
-    private int x_dir, y_dir;
     /**
      * constructor given params
      *
@@ -68,7 +64,7 @@ public class Jellyfish extends Swimmable {
     @Override
     public void run() {
         while (running) {
-            synchronized (pauseLock) {
+            synchronized (pauseLock) { // Critical part of the run method
                 if (!running) {
                     break;
                 }
@@ -83,66 +79,17 @@ public class Jellyfish extends Swimmable {
                     }
                 }
             }
-            if (getX_front() > 1150)
-                x_dir = -1;
-            if (getX_front() <50)
-                x_dir = 1;
-            if (getY_front() > 660)
-                y_dir = -1;
-            if (getY_front() < 90)
-                y_dir = 1;
-            if(AquaPanel.getInstance().w.isOn) {
+
+            if (Worm.getInstance().foodPlaced){
                 try {
                     cb.await();
-                } catch (InterruptedException e) {
-                    return;
-                } catch (BrokenBarrierException e) {
-                    return;
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
-                if (((getY_front() >= AquaPanel.getInstance().getHeight() / 2 - 6) && (getY_front() <= AquaPanel.getInstance().getHeight() / 2 + 6) && ((getX_front() >= AquaPanel.getInstance().getWidth() / 2 - 6) && (getX_front() <= AquaPanel.getInstance().getWidth() / 2 + 6)))) {
-                    AquaPanel.getInstance().w.setOn(false);
-                    eatInc();
-                }
-                if (x_dir == 1 && (getX_front() < AquaPanel.getInstance().getWidth() / 2)) {
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
-                    if (getY_front() < AquaPanel.getInstance().getHeight() / 2) {
-                        y_dir = 1;
-                    } else {
-                        y_dir = -1;
-                    }
-                    setY_front(getY_front() + getVerSpeed() * y_dir);
-                } else if (x_dir == 1 && getX_front() > AquaPanel.getInstance().getWidth() / 2) {
-                    x_dir = -1;
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
-                    if (getY_front() < AquaPanel.getInstance().getHeight() / 2) {
-                        y_dir = 1;
-                    } else {
-                        y_dir = -1;
-                    }
-                    setY_front(getY_front() + getVerSpeed() * y_dir);
-                } else if (x_dir == -1 && (getX_front() < AquaPanel.getInstance().getWidth() / 2)) {
-                    x_dir = 1;
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
-                    if (getY_front() < AquaPanel.getInstance().getHeight() / 2) {
-                        y_dir = 1;
-                    } else {
-                        y_dir = -1;
-                    }
-                    setY_front(getY_front() + getVerSpeed() * y_dir);
-                } else {
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
-                    if (getY_front() < AquaPanel.getInstance().getHeight() / 2) {
-                        y_dir = 1;
-                    } else {
-                        y_dir = -1;
-                    }
-                    setY_front(getY_front() + getVerSpeed() * y_dir);
-                }
-            }else {
-                setX_front(getX_front() + (getHorSpeed() * x_dir));
-                setY_front(getY_front() + (getVerSpeed() * y_dir));
             }
-            AquaPanel.getInstance().repaint();
+
+            moveJellyFish();
+
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -150,6 +97,11 @@ public class Jellyfish extends Swimmable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void moveJellyFish() {
+        setX_front(x_front + horSpeed * x_dir);
+        setY_front(y_front + verSpeed * y_dir);
     }
 
 
@@ -276,22 +228,6 @@ public class Jellyfish extends Swimmable {
         return size;
     }
 
-    public void drawAnimal(Graphics g) {
-        int numLegs;
-        if (size < 40)
-            numLegs = 5;
-        else if (size < 80)
-            numLegs = 9;
-        else
-            numLegs = 12;
-        g.setColor(col);
-        g.fillArc(x_front - size / 2, y_front - size / 4, size, size / 2, 0, 180);
-        for (int i = 0; i < numLegs; i++)
-            g.drawLine(x_front - size / 2 + size / numLegs + size * i / (numLegs + 1),
-                    y_front, x_front - size / 2 + size / numLegs + size * i / (numLegs + 1),
-                    y_front + size / 3);
-    }
-
     public void setSuspend() {
         paused=true;
     }
@@ -309,7 +245,36 @@ public class Jellyfish extends Swimmable {
         this.cb=b;
     }
 
-    //@Override
-    public void reset() {running =false; }
+    @Override
+    public void reset() {running =false;
+    }
 
+    @Override
+    public void drawCreature(Graphics g) {
+        int numLegs;
+        if (size < 40)
+            numLegs = 5;
+        else if (size < 80)
+            numLegs = 9;
+        else
+            numLegs = 12;
+        g.setColor(col);
+        g.fillArc(x_front - size / 2, y_front - size / 4, size, size / 2, 0, 180);
+        for (int i = 0; i < numLegs; i++)
+            g.drawLine(x_front - size / 2 + size / numLegs + size * i / (numLegs + 1),
+                    y_front, x_front - size / 2 + size / numLegs + size * i / (numLegs + 1),
+                    y_front + size / 3);
+
+        if (x_front >= g.getClipBounds().width) x_dir = -1;
+        if (x_front <= 0) x_dir = 1;
+
+
+        if (y_front - size/2 >= g.getClipBounds().height) y_dir = -1;
+        if (y_front + size/2 <= 0) y_dir = 1;
+
+        if (Worm.getInstance().isNearFood(g, this)) {
+            Worm.getInstance().setFoodPlaced(false);
+            eatInc();
+        }
+    }
 }
