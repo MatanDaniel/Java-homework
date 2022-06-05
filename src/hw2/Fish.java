@@ -1,6 +1,3 @@
-package hw2;
-
-import hw2.Swimmable;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.concurrent.BrokenBarrierException;
@@ -11,8 +8,9 @@ public class Fish extends Swimmable {
     private int size;
     private Color col;
     private int eatCount;
-    private int x_front, y_front, x_dir, y_dir;
 
+
+    private int foodX, foodY;
     /**
      * default constructor
      */
@@ -44,8 +42,8 @@ public class Fish extends Swimmable {
 
     @Override
     public void run() {
-        while (running) {
-            synchronized (pauseLock) {
+        while (true) {
+            synchronized (pauseLock) {  // Critical part of the run method
                 if (!running) {
                     break;
                 }
@@ -60,79 +58,30 @@ public class Fish extends Swimmable {
                     }
                 }
             }
-            if (getX_front() > 1150)
-                x_dir = -1;
-            if (getX_front() < 50)
-                x_dir = 1;
-            if (getY_front() > 660)
-                y_dir = -1;
-            if (getY_front() < 90)
-                y_dir = 1;
-            if (AquaPanel.getInstance().w.isOn) {
-                try{
+
+            if (Worm.getInstance().foodPlaced){
+                try {
                     cb.await();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
-                catch (InterruptedException e) {
-                    return;
-                }
-                catch (BrokenBarrierException e){
-                    return;
-                }
-                if (((getY_front()>=AquaPanel.getInstance().getHeight()/2-6)&&(getY_front()<=AquaPanel.getInstance().getHeight()/2+6)&& ((getX_front() >= AquaPanel.getInstance().getWidth() / 2-6)&&(getX_front()<=AquaPanel.getInstance().getWidth()/2+6)))) {
-                    AquaPanel.getInstance().w.setOn(false);
-                    eatInc();
-                }
-                if (x_dir == 1 && (getX_front() < AquaPanel.getInstance().getWidth() / 2)) {
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
-                    if(getY_front()<AquaPanel.getInstance().getHeight()/2) {
-                        y_dir=1;
-                    }
-                    else{
-                        y_dir=-1;
-                    }
-                    setY_front(getY_front()+getVerSpeed()*y_dir);
-                } else if (x_dir == 1 && getX_front() > AquaPanel.getInstance().getWidth() / 2) {
-                    x_dir = -1;
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
-                    if(getY_front()<AquaPanel.getInstance().getHeight()/2) {
-                        y_dir=1;
-                    }
-                    else{
-                        y_dir=-1;
-                    }
-                    setY_front(getY_front()+getVerSpeed()*y_dir);
-                } else if (x_dir == -1 && (getX_front() < AquaPanel.getInstance().getWidth() / 2)) {
-                    x_dir = 1;
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
-                    if(getY_front()<AquaPanel.getInstance().getHeight()/2) {
-                        y_dir=1;
-                    }
-                    else{
-                        y_dir=-1;
-                    }
-                    setY_front(getY_front()+getVerSpeed()*y_dir);
-                } else {
-                    setX_front(getX_front() + getHorSpeed() * x_dir);
-                    if(getY_front()<AquaPanel.getInstance().getHeight()/2) {
-                        y_dir=1;
-                    }
-                    else{
-                        y_dir=-1;
-                    }
-                    setY_front(getY_front()+getVerSpeed()*y_dir);
-                }
-            } else {
-                setX_front(getX_front() + (getHorSpeed() * x_dir));
-                setY_front(getY_front() + (getVerSpeed() * y_dir));
             }
-            AquaPanel.getInstance().repaint();
+
+            moveFish();
+
             try {
-                Thread.sleep(10);
+                Thread.sleep(16);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
+    }
+
+    private void moveFish() {
+        setX_front(x_front + horSpeed * x_dir);
+        setY_front(y_front + verSpeed * y_dir);
+
+
     }
 
     public String getAnimalName() {
@@ -302,7 +251,35 @@ public class Fish extends Swimmable {
 
     }
 
-    public void drawAnimal(Graphics g) {
+
+    @Override
+    public void setSuspend() {
+        paused=true;
+    }
+
+    @Override
+    public void setResume() {
+        synchronized (pauseLock){
+            paused=false;
+            pauseLock.notifyAll();
+        }
+    }
+
+    @Override
+    public void setBarrier(CyclicBarrier b) {
+        this.cb=b;
+    }
+
+    @Override
+    public Color getColor() {
+        return col;
+    }
+
+    @Override
+    public void reset() {running = false;}
+
+    @Override
+    public void drawCreature(Graphics g) {
         g.setColor(col);
         if (x_dir == 1) // fish swims to right side
         {
@@ -351,33 +328,34 @@ public class Fish extends Swimmable {
 
             g2.drawLine(x_front, y_front, x_front + size / 10, y_front + size / 10);
             g2.setStroke(new BasicStroke(1));
+
+
+        }
+
+        foodX = g.getClipBounds().width /2;
+        foodY = g.getClipBounds().height /2;
+
+
+        if (Worm.getInstance().foodPlaced) {
+            if (x_dir == 1 && x_front > foodX) x_dir = -1;
+            if (x_dir == -1 && x_front < foodX) x_dir = 1;
+            if (y_dir == 1 && y_front > foodY) y_dir = -1;
+            if (y_dir == -1 && y_front < foodY) y_dir = 1;
+        }
+        else
+        {
+            if (x_front >= g.getClipBounds().width) x_dir = -1;
+            if (x_front <= 0) x_dir = 1;
+
+            if (y_front - size/2 >= g.getClipBounds().height) y_dir = -1;
+            if (y_front + size/2 <= 0) y_dir = 1;
+        }
+
+
+
+        if (Worm.getInstance().isNearFood(g, this)) {
+            Worm.getInstance().setFoodPlaced(false);
+            eatInc();
         }
     }
-
-    @Override
-    public void setSuspend() {
-        paused=true;
-    }
-
-    @Override
-    public void setResume() {
-        synchronized (pauseLock){
-            paused=false;
-            pauseLock.notifyAll();
-        }
-    }
-
-    @Override
-    public void setBarrier(CyclicBarrier b) {
-        this.cb=b;
-    }
-
-    @Override
-    public Color getColor() {
-        return col;
-    }
-
-    @Override
-    public void reset() {running = false;}
-
 }
