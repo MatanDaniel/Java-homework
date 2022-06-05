@@ -2,8 +2,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.concurrent.CyclicBarrier;
@@ -12,9 +15,10 @@ public class AquaPanel extends JPanel implements Runnable{
     private JFrame frame = new JFrame("Info");
     private static BufferedImage image = null;
     private int totalEatCounter = 0;
-    public HashSet<SeaCreature> seaCreatures = new HashSet<>();
+    public ArrayList<SeaCreature> seaCreatures = new ArrayList<>();
     public JPanel buttonPanel = new JPanel();
     boolean isPaused=false;
+
     public AquaPanel() {
         buttonPanel.setLayout(new GridLayout());
         setPreferredSize(new Dimension(1200, 700));
@@ -25,6 +29,7 @@ public class AquaPanel extends JPanel implements Runnable{
         JButton food = new JButton("Food");
         JButton info = new JButton("Info");
         JButton exit = new JButton("Exit");
+        JButton decorator = new JButton("Decorator");
 
         buttonPanel.add(addAnimal);
         buttonPanel.add(sleep);
@@ -32,6 +37,7 @@ public class AquaPanel extends JPanel implements Runnable{
         buttonPanel.add(reset);
         buttonPanel.add(food);
         buttonPanel.add(info);
+        buttonPanel.add(decorator);
         buttonPanel.add(exit);
 
         BorderLayout border = new BorderLayout();
@@ -44,10 +50,18 @@ public class AquaPanel extends JPanel implements Runnable{
         sleep.addActionListener(e -> sleepAll());
         wakeUp.addActionListener(e -> wakeAll());
         info.addActionListener(e -> getInfo());
+        JPanelDecorator dec = new JPanelDecorator(seaCreatures);
+        dec.setPreferredSize(new Dimension(1200, 500));
+
+        decorator.addActionListener(e -> {
+            JPanelDecorator dec1 = new JPanelDecorator(seaCreatures);
+            dec1.setVisible(true);
+
+
+     });
         addAnimal.addActionListener(e -> new AddAnimalDialog(this));
 
     }
-
     private void placeFood() {
         if(seaCreatures.size()!=0) {
             CyclicBarrier cb = new CyclicBarrier((int) seaCreatures.stream().filter(e -> e instanceof Swimmable).count());
@@ -105,7 +119,7 @@ public class AquaPanel extends JPanel implements Runnable{
     }
 
     public JTable getAnimalList() {
-        DefaultTableModel tbl = new DefaultTableModel();
+        DefaultTableModel tbl = new DefaultTableModel(); // Creating info's table
         tbl.addColumn("Animal Name");
         tbl.addColumn("Color");
         tbl.addColumn("Size");
@@ -155,12 +169,11 @@ public class AquaPanel extends JPanel implements Runnable{
                 };
                 tbl.addRow(row);
             }
-
         }
         return new JTable(tbl);
     }
 
-    public void changeBackground(String msg) {
+    public void changeBackground(String msg) { // background from hw2
         if (msg.equals("image")) {
             try {
                 image = ImageIO.read(Objects.requireNonNull(AquaPanel.class.getResourceAsStream("image.jpg")));
@@ -187,15 +200,23 @@ public class AquaPanel extends JPanel implements Runnable{
         if (image != null) {
             g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
         }
-
         //Draw all creatures on screen
-        seaCreatures.forEach(swimmer -> swimmer.drawCreature(g));
-
+            for (int i = 0; i < seaCreatures.size(); i++) {
+                if (seaCreatures.get(i) instanceof Swimmable){
+                    Swimmable temp = (Swimmable) seaCreatures.get(i);
+                    temp.drawCreature(g);
+                }
+                else if(seaCreatures.get(i) instanceof Immobile){
+                    Immobile temp = (Immobile) seaCreatures.get(i);
+                    temp.drawCreature(g);
+                    System.out.println("here");
+                }
+            }
+//        seaCreatures.forEach(swimmer -> swimmer.drawCreature(g));
         if (Worm.getInstance().foodPlaced) {
             Worm.drawAnimal(g, this);
         }
     }
-
     @Override
     public void run() {
         while (true) {
@@ -205,7 +226,8 @@ public class AquaPanel extends JPanel implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
     }
+
+
 }
