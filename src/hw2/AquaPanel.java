@@ -2,8 +2,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,11 +9,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.concurrent.CyclicBarrier;
 
-public class AquaPanel extends JPanel implements Runnable{
+public class AquaPanel extends JPanel implements Runnable, Observer{
     private JFrame frame = new JFrame("Info");
     private static BufferedImage image = null;
     private int totalEatCounter = 0;
-    public ArrayList<SeaCreature> seaCreatures = new ArrayList<>();
+    public HashSet<SeaCreature> seaCreatures = new HashSet<>();
     public JPanel buttonPanel = new JPanel();
     boolean isPaused=false;
 
@@ -115,7 +113,6 @@ public class AquaPanel extends JPanel implements Runnable{
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         }
-
     }
 
     public JTable getAnimalList() {
@@ -201,17 +198,14 @@ public class AquaPanel extends JPanel implements Runnable{
             g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
         }
         //Draw all creatures on screen
-            for (int i = 0; i < seaCreatures.size(); i++) {
-                if (seaCreatures.get(i) instanceof Swimmable){
-                    Swimmable temp = (Swimmable) seaCreatures.get(i);
-                    temp.drawCreature(g);
-                }
-                else if(seaCreatures.get(i) instanceof Immobile){
-                    Immobile temp = (Immobile) seaCreatures.get(i);
-                    temp.drawCreature(g);
-                    System.out.println("here");
-                }
+        for (SeaCreature seaCreature : seaCreatures) {
+            if (seaCreature instanceof Swimmable temp) {
+                temp.drawCreature(g);
+            } else if (seaCreature instanceof Immobile temp) {
+                temp.drawCreature(g);
+                System.out.println("here");
             }
+        }
 //        seaCreatures.forEach(swimmer -> swimmer.drawCreature(g));
         if (Worm.getInstance().foodPlaced) {
             Worm.drawAnimal(g, this);
@@ -229,5 +223,9 @@ public class AquaPanel extends JPanel implements Runnable{
         }
     }
 
+    @Override
+    public void update(String msg) {
+        JOptionPane.showMessageDialog(null, msg + " is hungry!", "Notify", JOptionPane.PLAIN_MESSAGE); // pop up message for when the animal is hungry
+    }
 
 }
