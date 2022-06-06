@@ -2,7 +2,7 @@ import java.awt.*;
 
 public abstract class Immobile implements SeaCreature{
     protected String name;
-    protected Color color;
+    protected Color color = Color.GREEN;
     protected int size;
     protected int Coordinate_x;
     protected int Coordinate_y;
