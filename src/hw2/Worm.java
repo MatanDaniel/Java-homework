@@ -13,7 +13,8 @@ public class Worm {
         return instance;
     }
 
-    public boolean isNearFood(Graphics g, Swimmable swimmable) {
+    public boolean isNearFood(Graphics g, Swimmable swimmable) { // checks if swimmable object reached near the
+        //food object
         int x1 = g.getClipBounds().width / 2, y1 = g.getClipBounds().height / 2;
 
         int x2 = swimmable.x_front, y2 = swimmable.y_front;
@@ -27,7 +28,8 @@ public class Worm {
         this.foodPlaced = foodPlaced;
     }
 
-    public static void drawAnimal(Graphics g, AquaPanel panel){
+    public static void drawAnimal(Graphics g, AquaPanel panel){ // draw animal of Worm makes sure the Worm
+        //will be created in the middle of the screen
         Graphics2D g2=(Graphics2D) g;
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.MAGENTA);
