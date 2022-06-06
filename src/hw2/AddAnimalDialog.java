@@ -89,7 +89,6 @@ public class AddAnimalDialog extends JDialog {
                 JOptionPane.showMessageDialog(null, "Error: Animal's horizontal velocity must be between 1-10!");
             if (verSpeed < 1 || verSpeed > 10)
                 JOptionPane.showMessageDialog(null, "Error: Animal's vertical velocity must be between 1-10!");
-            // TODO: color - string -> int
             if (!(size < 20 || size > 320) && !(horSpeed < 1 || horSpeed > 10) && !(verSpeed < 1 || verSpeed > 10)) {
 
                 if (aquaPanel.seaCreatures.size() >= 5) {
@@ -108,6 +107,7 @@ public class AddAnimalDialog extends JDialog {
                 }
                 else{
                     aquaPanel.seaCreatures.add(fac);
+                    fac.attach(aquaPanel);
                 }
 
                 if (fac != null)
@@ -132,4 +132,5 @@ public class AddAnimalDialog extends JDialog {
             default -> null;
         };
     }
+
 }
