@@ -246,6 +246,11 @@ public class Jellyfish extends Swimmable implements MarineAnimal {
     }
 
     @Override
+    public void setColor(Color col) {
+        this.col = col;
+    }
+
+    @Override
     public void drawCreature(Graphics g) {
         int numLegs;
         if (size < 40)
@@ -275,11 +280,9 @@ public class Jellyfish extends Swimmable implements MarineAnimal {
     }
 
 
-    @Override
-    public void PaintFish(SeaCreature creature, Color col){
-        if (!(creature instanceof Immobile))
-        ((Swimmable)creature).setColor(c);
-
+    @Override // Decorator DP:
+    public void PaintFish(Color col){
+        new MarineAnimalDecorator(this).PaintFish(col);
 
     }
 }
