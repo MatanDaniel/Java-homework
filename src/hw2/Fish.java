@@ -1,7 +1,4 @@
-import javax.swing.*;
 import java.awt.*;
-import java.util.HashSet;
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public class Fish extends Swimmable implements MarineAnimal {
@@ -133,16 +130,8 @@ public class Fish extends Swimmable implements MarineAnimal {
         return col;
     }
 
-    /**
-     * setter
-     *
-     * @param col color of fish
-     * @return true if successful, otherwise false
-     */
-    public boolean setCol(Color col) {
-        this.col = col;
-        return true;
-    }
+
+
 
     /**
      * setter
@@ -280,6 +269,11 @@ public class Fish extends Swimmable implements MarineAnimal {
     public void reset() {running = false;}
 
     @Override
+    public void setColor(Color col) {
+        this.col = col;
+    }
+
+    @Override
     public void drawCreature(Graphics g) {
         g.setColor(col);
         if (x_dir == 1) // fish swims to right side
@@ -358,10 +352,8 @@ public class Fish extends Swimmable implements MarineAnimal {
         }
     }
 
-
-
-    @Override
-    public void PaintFish() {
-
+    @Override // Decorator DP:
+    public void PaintFish(Color col) {
+        new MarineAnimalDecorator(this).PaintFish(col);
     }
 }
