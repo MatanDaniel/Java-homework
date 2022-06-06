@@ -6,9 +6,14 @@ import java.util.concurrent.CyclicBarrier;
  */
 public class Jellyfish extends Swimmable implements MarineAnimal {
     private static final int EAT_DISTANCE = 4;
+    private int frequency;
     private int size;
     private int eatCount;
     private Color col;
+    private HungerState state;
+    private Hunger hungry;
+    private Satiated full;
+
     /**
      * constructor given params
      *
@@ -28,9 +33,11 @@ public class Jellyfish extends Swimmable implements MarineAnimal {
         eatCount = 0;
         y_dir = 1;
         x_dir = 1;
+        this.frequency = this.size*2;
+        this.hungry = new Hunger(); // creating a hunger state
+        this.full = new Satiated(); // creating a satiated state (מצב שבעה)
+        this.state = new Satiated(); // default initialize state (המצב שבו מתחילים)
     }
-
-    // Getters for each field:
 
     /**
      * getter
@@ -40,8 +47,6 @@ public class Jellyfish extends Swimmable implements MarineAnimal {
     public int getEAT_DISTANCE() {
         return EAT_DISTANCE;
     }
-
-    // TODO: override the run method of thread
 
     @Override
     public int getSize() {
@@ -142,8 +147,6 @@ public class Jellyfish extends Swimmable implements MarineAnimal {
     public int getY_dir() {
         return y_dir;
     }
-
-    // Setters for each field
 
     /**
      * setter
@@ -251,6 +254,15 @@ public class Jellyfish extends Swimmable implements MarineAnimal {
     }
 
     @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void setState(HungerState state) {
+
+    }
+    @Override
     public void drawCreature(Graphics g) {
         int numLegs;
         if (size < 40)
@@ -283,6 +295,28 @@ public class Jellyfish extends Swimmable implements MarineAnimal {
     @Override // Decorator DP:
     public void PaintFish(Color col){
         new MarineAnimalDecorator(this).PaintFish(col);
-
     }
+
+    @Override
+    public HungerState getHungerState() {
+        return this.state;
+    }
+
+    @Override
+    public void setHungerState(HungerState hungerState) {
+        this.state = hungerState;
+    }
+
+    @Override
+    public void attach(Observer object) {
+        hungryObservers.add(object);
+    }
+
+    @Override
+    public void notifyAllObservers() {
+        for(Observer x : hungryObservers){
+            x.update(getAnimalName());
+        }
+    }
+
 }
