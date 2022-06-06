@@ -6,7 +6,7 @@ public class Fish extends Swimmable implements MarineAnimal {
     private int size;
     private Color col;
     private int eatCount;
-
+    private HungerState state;
 
     private int foodX, foodY;
     /**
@@ -64,14 +64,16 @@ public class Fish extends Swimmable implements MarineAnimal {
                     exception.printStackTrace();
                 }
             }
-
             moveFish();
-
             try {
                 Thread.sleep(16);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if (this.getFrequency() == 0){
+                update();
+            }
+
         }
     }
 
@@ -129,9 +131,6 @@ public class Fish extends Swimmable implements MarineAnimal {
     public Color getCol() {
         return col;
     }
-
-
-
 
     /**
      * setter
@@ -274,6 +273,15 @@ public class Fish extends Swimmable implements MarineAnimal {
     }
 
     @Override
+    public void update() {
+    }
+
+    @Override
+    public void setState(HungerState state) {
+
+    }
+
+    @Override
     public void drawCreature(Graphics g) {
         g.setColor(col);
         if (x_dir == 1) // fish swims to right side
@@ -356,4 +364,27 @@ public class Fish extends Swimmable implements MarineAnimal {
     public void PaintFish(Color col) {
         new MarineAnimalDecorator(this).PaintFish(col);
     }
+
+    @Override
+    public HungerState getHungerState() {
+        return this.state;
+    }
+
+    @Override
+    public void setHungerState(HungerState hungerState) {
+        this.state = hungerState;
+    }
+
+    @Override
+    public void attach(Observer object) {
+        hungryObservers.add(object);
+    }
+
+    @Override
+    public void notifyAllObservers() {
+        for(Observer x : hungryObservers){
+            x.update(this.getAnimalName());
+        }
+    }
+
 }
