@@ -6,11 +6,14 @@ import java.util.concurrent.CyclicBarrier;
  * * @author Matan Daniel, 315783522 and Ron Bar-Zvi, 304969520
  */
 
-public abstract class Swimmable extends Thread implements SeaCreature {
+public abstract class Swimmable extends Thread implements SeaCreature, Subject,Cloneable {
+
     protected volatile boolean running=true;
     protected volatile boolean paused=false;
     protected final Object pauseLock=new Object();
-    protected int x_front, y_front, x_dir, y_dir;
+    protected int x_front, y_front, x_dir, y_dir, foodFreq,freqCount=0;
+    public final int objectID;
+    private static int counter=0;
 
     /**
      * horizontal speed
@@ -28,6 +31,7 @@ public abstract class Swimmable extends Thread implements SeaCreature {
     public Swimmable() {
         horSpeed = 0;
         verSpeed = 0;
+        this.objectID=++counter;
     }
 
     /**
@@ -49,6 +53,8 @@ public abstract class Swimmable extends Thread implements SeaCreature {
     public Swimmable(int horSpeed, int verSpeed) {
         this.horSpeed = horSpeed;
         this.verSpeed = verSpeed;
+        this.foodFreq=foodFreq;
+        this.objectID=++counter;
     }
 
     /**
@@ -148,7 +154,23 @@ public abstract class Swimmable extends Thread implements SeaCreature {
     abstract public void setResume();
 
     abstract public void setBarrier(CyclicBarrier b);
+
     abstract public void reset();
 
+    abstract public void setColor(Color col);
+
+    abstract public void update();
+
+    abstract public Swimmable clone();
+    abstract public void editSwimmable(int size, int x, int y,int horSpeed,int verSpeed,Color col);
+    public int getID(){return objectID;}
+
+    abstract public void setState(Color col,int size,int x_front,int y_front,int horSpeed,int verSpeed,int x_dir,int y_dir);
+    public int getX_front(){return x_front;};
+    public int getY_front(){return y_front;};
+
+    abstract public int getX_dir();
+
+    abstract public int getY_dir();
 
 }

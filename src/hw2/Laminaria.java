@@ -7,6 +7,11 @@ public class Laminaria extends Immobile {
     }
 
     @Override
+    public String getPlantName() {
+        return "Laminaria";
+    }
+
+    @Override // Implementing interface's method and drawing a creature
         public void drawCreature(Graphics g) {
             g.setColor(this.getColor()); //set the color
             g.fillArc(this.getCoordinate_x()-this.getSize()/20, this.getCoordinate_y()-this.getSize(), this.getSize()/10, this.getSize()*4/5, 0, 360);
